@@ -1,0 +1,119 @@
+﻿<!-- ====================================================================
+     1. CONFIGURACIÓN DE TAILWIND CSS Y FUENTES PARA ELEMENTOR
+     (Esta sección permite que Elementor renderice clases de Tailwind)
+     ==================================================================== -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'Poppins', 'sans-serif'],
+        },
+        fontSize: {
+          'title': 'clamp(1.25rem, 3vw, 2.2rem)',
+          'body': '1.125rem',
+          'caption': '0.875rem',
+          'micro': '0.625rem',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  @keyframes marquee-left {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee-left {
+    animation: marquee-left 30s linear infinite;
+  }
+</style>
+<!-- FIN DE CONFIGURACIÓN -->
+
+<!-- 2. CONTENIDO PRINCIPAL DE LA HOME PARA ELEMENTOR -->
+<div class="w-full bg-black text-white font-sans selection:bg-red-500 selection:text-white">
+
+  <!-- Hero Banner -->
+  <section id="inicio" class="relative w-full min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden">
+    <div class="w-full px-6 md:px-12 relative z-10 flex flex-col justify-center h-full mt-24 md:mt-0 max-w-[1800px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-12 w-full">
+        <div class="flex flex-col items-start min-w-[50%]">
+          <h1 class="text-[14vw] md:text-[7vw] lg:text-[7.5vw] xl:text-[8vw] font-black leading-[0.85] tracking-tighter uppercase max-w-full">
+            <span class="text-[#EF4444]">ANTOJOS</span> <br/>PERUANOS <br/><span class="text-[#EF4444] whitespace-nowrap">EN BOXES.</span>
+          </h1>
+          <a class="mt-8 md:mt-12 group flex items-center justify-center bg-white text-black font-black py-5 px-10 md:py-6 md:px-14 rounded-full text-title transition-all duration-300 hover:bg-[#EF4444] hover:text-white uppercase tracking-widest border border-white" href="boxes-de-regalo">
+            Ver los Boxes
+          </a>
+        </div>
+        <div class="relative aspect-[4/3] w-full max-w-[400px] md:max-w-[45vw] lg:max-w-[550px] rounded-[2rem] md:rounded-[3rem] overflow-hidden hover:scale-[1.02] transition-transform duration-700 ease-out shrink-0 mx-auto md:mx-0">
+          <img src="https://golozin-ecommerce.vercel.app/images/premium_box_hero.png" alt="Premium Box Hero" class="absolute inset-0 w-full h-full object-cover">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee Ribbon -->
+  <div class="bg-[#EF4444] text-white py-4 overflow-hidden flex whitespace-nowrap">
+    <div class="flex gap-8 items-center text-2xl md:text-4xl font-black uppercase tracking-widest animate-marquee-left">
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+    </div>
+  </div>
+
+  <!-- Experiencias Section -->
+  <section class="bg-[#F3F4F6] text-black rounded-t-[3rem] -mt-8 pt-24 pb-32 px-6 md:px-12 relative z-20">
+    <div class="w-full max-w-[1800px] mx-auto flex flex-col gap-16">
+      <h2 class="text-[10vw] md:text-[6vw] font-black uppercase leading-none tracking-tighter">Nuestras Experiencias</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <a href="producto-antojos-peruanos.html" class="group flex flex-col gap-6">
+          <div class="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden">
+            <img src="https://golozin-ecommerce.vercel.app/images/antojos_peruanos_box.png" alt="Antojos Peruanos" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="flex flex-col gap-4">
+            <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter">Antojos Peruanos</h3>
+            <p class="text-gray-600 text-lg md:text-xl font-medium">Tus clásicos favoritos del Perú en una sola caja. Perfecta para matar el antojo o sorprender a quien está lejos con un pedacito de casa.</p>
+          </div>
+        </a>
+        
+        <a href="producto-sabor-americano.html" class="group flex flex-col gap-6">
+          <div class="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden">
+            <img src="https://golozin-ecommerce.vercel.app/images/sabor_americano_box.png" alt="Sabor Americano" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="flex flex-col gap-4">
+            <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter">Sabor Americano</h3>
+            <p class="text-gray-600 text-lg md:text-xl font-medium">Los chocolates y caramelos americanos más virales. Sabores que no encuentras en cualquier bodega.</p>
+          </div>
+        </a>
+        
+        <a href="producto-pack-sorpresitas.html" class="group flex flex-col gap-6">
+          <div class="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden">
+            <img src="https://golozin-ecommerce.vercel.app/images/peruvian_box.png" alt="Packs Cumpleaños" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="flex flex-col gap-4">
+            <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter">Packs Cumpleaños</h3>
+            <p class="text-gray-600 text-lg md:text-xl font-medium">Olvídate de armar bolsitas. Sorpresitas listas para repartir y disfrutar.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Corporativo Section -->
+  <section class="bg-white text-black py-32 px-6 md:px-12 flex flex-col items-center text-center">
+    <div class="max-w-4xl flex flex-col items-center gap-8">
+      <h2 class="text-[10vw] md:text-[6vw] font-black uppercase leading-none tracking-tighter">REGALOS CORPORATIVOS</h2>
+      <p class="text-gray-600 text-xl md:text-3xl font-medium max-w-2xl">Sal del clásico corporativo. Regala nuestros boxes y sorprende de verdad a tu equipo o clientes.</p>
+      <a href="https://wa.me/51967171097?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20regalos%20corporativos%20B2B." target="_blank" rel="noopener noreferrer" class="mt-4 bg-black text-white font-bold uppercase tracking-widest text-sm md:text-base px-10 py-5 rounded-full hover:bg-gray-800 transition-colors">
+        Cotizar para mi empresa
+      </a>
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,88 @@
+﻿<!-- ====================================================================
+     1. CONFIGURACIÓN DE TAILWIND CSS Y FUENTES PARA ELEMENTOR
+     (Esta sección permite que Elementor renderice clases de Tailwind)
+     ==================================================================== -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'Poppins', 'sans-serif'],
+        },
+        fontSize: {
+          'title': 'clamp(1.25rem, 3vw, 2.2rem)',
+          'body': '1.125rem',
+          'caption': '0.875rem',
+          'micro': '0.625rem',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  @keyframes marquee-left {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee-left {
+    animation: marquee-left 30s linear infinite;
+  }
+</style>
+<!-- FIN DE CONFIGURACIÓN -->
+
+<!-- 2. DETALLE PRODUCTO ANTOJOS PERUANOS PARA ELEMENTOR -->
+<div class="w-full bg-white text-black font-sans selection:bg-red-500 selection:text-white">
+
+    <div class="flex flex-col font-sans pt-32 pb-24 selection:bg-red-500 selection:text-white">
+      <h1 class="w-full text-center text-[12vw] md:text-[8vw] lg:text-[6vw] font-black leading-[0.85] tracking-tighter uppercase break-words px-4 mb-16">
+        Antojos Peruanos
+      </h1>
+      
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-24 w-full">
+        <!-- Left: Image -->
+        <div class="lg:w-3/5">
+          <div class="relative aspect-square bg-[#F3F4F6] rounded-[3rem] p-8 overflow-hidden group">
+            <img src="https://golozin-ecommerce.vercel.app/images/antojos_peruanos_box.png" alt="Antojos Peruanos" class="absolute inset-0 w-full h-full object-contain p-12 transition-transform duration-500 group-hover:scale-105">
+          </div>
+        </div>
+        
+        <!-- Right: Info -->
+        <div class="lg:w-2/5 flex flex-col justify-center">
+          <div class="text-7xl lg:text-8xl font-black text-black tracking-tighter border-b-4 border-black pb-8 mb-12">
+            S/65
+          </div>
+          
+          <p class="text-body text-gray-600 leading-relaxed mb-12 font-medium">
+            Tus clásicos favoritos del Perú en una sola caja. Perfecta para matar el antojo o sorprender a quien está lejos.
+          </p>
+          
+          <div class="mb-12">
+            <h2 class="text-title font-black uppercase tracking-tight mb-6">INCLUYE:</h2>
+            <ul class="flex flex-col gap-4 text-body font-medium text-gray-700">
+              <li class="flex items-center gap-4"><span class="text-[#EF4444]">✦</span> Doña Pepa</li>
+              <li class="flex items-center gap-4"><span class="text-[#EF4444]">✦</span> Sublime</li>
+              <li class="flex items-center gap-4"><span class="text-[#EF4444]">✦</span> Cua Cua</li>
+              <li class="flex items-center gap-4"><span class="text-[#EF4444]">✦</span> Inca Kola</li>
+            </ul>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-6 items-center w-full">
+            <div class="flex items-center justify-between w-full sm:w-auto h-24 bg-[#F3F4F6] rounded-full px-8 shrink-0">
+              <span class="text-2xl font-bold cursor-not-allowed opacity-50">-</span>
+              <span class="text-2xl font-black px-6">1</span>
+              <span class="text-2xl font-bold cursor-not-allowed opacity-50">+</span>
+            </div>
+            
+            <a href="#" class="flex items-center justify-center w-full h-24 font-black text-title rounded-[2rem] bg-black hover:bg-[#EF4444] text-white uppercase tracking-widest shadow-lg hover:shadow-2xl transition-all">
+              AGREGAR AL CARRITO
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+</div>
