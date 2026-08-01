@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio | Golozin</title>
+  <meta name="description" content="Golozin - Regalos Premium, Antojos Peruanos y Packs para Fiestas">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'Inter', 'sans-serif'],
+          },
+          fontSize: {
+            'title': 'clamp(1.25rem, 3vw, 2.2rem)',
+            'body': '1.125rem',
+            'caption': '0.875rem',
+            'micro': '0.625rem',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes marquee-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee-left {
+      animation: marquee-left 30s linear infinite;
+    }
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans bg-black">
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 pointer-events-none mix-blend-difference text-white">
+  <div class="w-full px-6 md:px-12 pointer-events-auto">
+    <div class="flex items-center justify-between h-[100px]">
+      <div class="flex-shrink-0 flex items-center">
+        <a href="index.html" class="flex items-center group">
+          <span class="text-[28px] md:text-[34px] font-black tracking-tighter leading-none uppercase">GOLOZIN</span>
+        </a>
+      </div>
+      <nav class="hidden lg:flex items-center gap-12 ml-auto mr-12">
+        <a href="index.html" class="text-[15px] font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">Inicio</a>
+        <div class="relative group h-[100px] flex items-center">
+          <a href="boxes-de-regalo.html" class="text-[15px] font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-50 transition-opacity">
+            Boxes
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <div class="absolute top-full left-0 w-64 bg-white text-black p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-2 border-black">
+            <div class="flex flex-col gap-4">
+              <a href="producto-antojos-peruanos.html" class="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Antojos Peruanos</a>
+              <a href="producto-sabor-americano.html" class="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Sabor Americano</a>
+              <a href="producto-chocolates-peruanos.html" class="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Chocolates Peruanos</a>
+            </div>
+          </div>
+        </div>
+        <div class="relative group h-[100px] flex items-center">
+          <a href="packs-cumpleanos.html" class="text-[15px] font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-50 transition-opacity">
+            Packs
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <div class="absolute top-full left-0 w-64 bg-white text-black p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-2 border-black">
+            <div class="flex flex-col gap-4">
+              <a href="producto-pack-sorpresitas.html" class="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Pack Sorpresitas</a>
+              <a href="producto-mesa-cumpleanera.html" class="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Mesa Cumpleañera</a>
+            </div>
+          </div>
+        </div>
+        <a href="corporativo.html" class="text-[15px] font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">Corporativo</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <button onclick="toggleMenu()" class="lg:hidden relative flex items-center justify-center w-12 h-12 rounded-full hover:opacity-50 transition-opacity">
+          <svg id="menu-icon-open" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <svg id="menu-icon-close" class="h-8 w-8 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu" class="fixed inset-0 bg-white text-black z-40 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] lg:hidden flex flex-col overflow-y-auto pt-[120px] px-6 pb-24 -translate-y-full">
+  <nav class="flex flex-col gap-10 text-[10vw] font-black uppercase tracking-tighter leading-none">
+    <a href="index.html" class="hover:text-red-500 transition-colors">Inicio</a>
+    <div class="flex flex-col gap-6">
+      <a href="boxes-de-regalo.html" class="hover:text-red-500 transition-colors">Boxes</a>
+      <div class="flex flex-col gap-4 pl-4 border-l-4 border-black/10">
+        <a href="producto-antojos-peruanos.html" class="text-2xl text-gray-500 hover:text-red-500 transition-colors">Antojos Peruanos</a>
+        <a href="producto-sabor-americano.html" class="text-2xl text-gray-500 hover:text-red-500 transition-colors">Sabor Americano</a>
+        <a href="producto-chocolates-peruanos.html" class="text-2xl text-gray-500 hover:text-red-500 transition-colors">Chocolates Peruanos</a>
+      </div>
+    </div>
+    <div class="flex flex-col gap-6">
+      <a href="packs-cumpleanos.html" class="hover:text-red-500 transition-colors">Packs</a>
+      <div class="flex flex-col gap-4 pl-4 border-l-4 border-black/10">
+        <a href="producto-pack-sorpresitas.html" class="text-2xl text-gray-500 hover:text-red-500 transition-colors">Pack Sorpresitas</a>
+        <a href="producto-mesa-cumpleanera.html" class="text-2xl text-gray-500 hover:text-red-500 transition-colors">Mesa Cumpleañera</a>
+      </div>
+    </div>
+    <a href="corporativo.html" class="hover:text-red-500 transition-colors">Corporativo</a>
+  </nav>
+</div>
+
+<main class="flex-1 w-full bg-black text-white selection:bg-red-500 selection:text-white">
+  <!-- Hero Banner -->
+  <section class="min-h-screen flex items-center justify-center pt-24 px-6 md:px-12">
+    <div class="w-full max-w-[1800px] grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="flex flex-col items-start gap-8 z-10">
+        <h1 class="text-[12vw] md:text-[8vw] font-black uppercase leading-[0.85] tracking-tighter">
+          <span class="text-[#EF4444] block">ANTOJOS</span>
+          <span class="block">PERUANOS</span>
+          <span class="text-[#EF4444] block">EN BOXES.</span>
+        </h1>
+        <a href="boxes-de-regalo.html" class="bg-white text-black font-bold uppercase tracking-widest text-sm md:text-base px-10 py-5 rounded-full hover:bg-gray-200 transition-colors">
+          Ver los Boxes
+        </a>
+      </div>
+      <div class="relative w-full aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden">
+        <img src="images/premium_box_hero.png" alt="Premium Box Hero" class="absolute inset-0 w-full h-full object-cover">
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee Ribbon -->
+  <div class="bg-[#EF4444] text-white py-4 overflow-hidden flex whitespace-nowrap">
+    <div class="flex gap-8 items-center text-2xl md:text-4xl font-black uppercase tracking-widest animate-marquee-left">
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+      <span>REGALOS PREMIUM</span><span>•</span><span>GOLOZIN</span><span>•</span><span>PACKS PARA FIESTAS</span><span>•</span><span>ANTOJOS PERUANOS</span><span>•</span>
+    </div>
+  </div>
+
+  <!-- Experiencias Section -->
+  <section class="bg-[#F3F4F6] text-black rounded-t-[3rem] -mt-8 pt-24 pb-32 px-6 md:px-12 relative z-20">
+    <div class="w-full max-w-[1800px] mx-auto flex flex-col gap-16">
+      <h2 class="text-[10vw] md:text-[6vw] font-black uppercase leading-none tracking-tighter">Nuestras Experiencias</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <a href="producto-antojos-peruanos.html" class="group flex flex-col gap-6">
+          <div class="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden">
+            <img src="images/antojos_peruanos_box.png" alt="Antojos Peruanos" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="flex flex-col gap-4">
+            <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter">Antojos Peruanos</h3>
+            <p class="text-gray-600 text-lg md:text-xl font-medium">Tus clásicos favoritos del Perú en una sola caja. Perfecta para matar el antojo o sorprender a quien está lejos con un pedacito de casa.</p>
+          </div>
+        </a>
+        
+        <a href="producto-sabor-americano.html" class="group flex flex-col gap-6">
+          <div class="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden">
+            <img src="images/sabor_americano_box.png" alt="Sabor Americano" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="flex flex-col gap-4">
+            <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter">Sabor Americano</h3>
+            <p class="text-gray-600 text-lg md:text-xl font-medium">Los chocolates y caramelos americanos más virales. Sabores que no encuentras en cualquier bodega.</p>
+          </div>
+        </a>
+        
+        <a href="producto-pack-sorpresitas.html" class="group flex flex-col gap-6">
+          <div class="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden">
+            <img src="images/peruvian_box.png" alt="Packs Cumpleaños" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <div class="flex flex-col gap-4">
+            <h3 class="text-4xl md:text-5xl font-black uppercase tracking-tighter">Packs Cumpleaños</h3>
+            <p class="text-gray-600 text-lg md:text-xl font-medium">Olvídate de armar bolsitas. Sorpresitas listas para repartir y disfrutar.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Corporativo Section -->
+  <section class="bg-white text-black py-32 px-6 md:px-12 flex flex-col items-center text-center">
+    <div class="max-w-4xl flex flex-col items-center gap-8">
+      <h2 class="text-[10vw] md:text-[6vw] font-black uppercase leading-none tracking-tighter">REGALOS CORPORATIVOS</h2>
+      <p class="text-gray-600 text-xl md:text-3xl font-medium max-w-2xl">Sal del clásico corporativo. Regala nuestros boxes y sorprende de verdad a tu equipo o clientes.</p>
+      <a href="https://wa.me/51967171097?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20regalos%20corporativos%20B2B." target="_blank" rel="noopener noreferrer" class="mt-4 bg-black text-white font-bold uppercase tracking-widest text-sm md:text-base px-10 py-5 rounded-full hover:bg-gray-800 transition-colors">
+        Cotizar para mi empresa
+      </a>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#0a0a0a] text-white py-12 overflow-hidden border-t border-white/10 flex flex-col justify-between relative z-10">
+  <div class="w-full px-6 md:px-12 max-w-[1800px] mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div class="col-span-1 md:col-span-2">
+        <h3 class="text-title font-black uppercase tracking-tight mb-6">GOLOZIN</h3>
+        <p class="text-gray-400 max-w-sm text-caption font-light leading-relaxed">Elevando el estándar de los regalos corporativos y las sorpresas personales en todo el Perú.</p>
+      </div>
+      <div class="flex flex-col gap-6">
+        <span class="text-gray-600 font-bold uppercase tracking-widest text-micro mb-2">Navegación</span>
+        <a href="index.html" class="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">Inicio</a>
+        <a href="boxes-de-regalo.html" class="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">Boxes de Regalo</a>
+        <a href="packs-cumpleanos.html" class="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">Packs Cumpleaños</a>
+        <a href="corporativo.html" class="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">B2B Corporativo</a>
+      </div>
+      <div class="flex flex-col gap-6">
+        <span class="text-gray-600 font-bold uppercase tracking-widest text-micro mb-2">Redes Sociales</span>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">Instagram</a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">TikTok</a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">Facebook</a>
+      </div>
+    </div>
+  </div>
+  <div class="w-full px-6 md:px-12 mt-12 flex flex-col">
+    <div class="w-full flex flex-col md:flex-row justify-between items-center gap-4 text-micro font-bold uppercase tracking-widest text-gray-600 mb-8 px-4">
+      <span>© 2026 GOLOZIN TODOS LOS DERECHOS RESERVADOS</span>
+      <div class="flex gap-8">
+        <a href="#" class="hover:text-white transition-colors">Términos</a>
+        <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Menu Script -->
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+    const isOpen = !menu.classList.contains('-translate-y-full');
+    if (isOpen) {
+      menu.classList.add('-translate-y-full');
+      menu.classList.remove('translate-y-0');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+    } else {
+      menu.classList.remove('-translate-y-full');
+      menu.classList.add('translate-y-0');
+      iconOpen.classList.add('hidden');
+      iconClose.classList.remove('hidden');
+    }
+  }
+</script>
+
+</body>
+</html>
