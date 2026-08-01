@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -14,7 +14,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Poppins', 'Inter', 'sans-serif'],
+            sans: ['Inter', 'Poppins', 'sans-serif'],
           },
           fontSize: {
             'title': 'clamp(1.25rem, 3vw, 2.2rem)',
@@ -78,6 +78,9 @@
         <a href="corporativo.html" class="text-[15px] font-bold uppercase tracking-widest hover:opacity-50 transition-opacity">Corporativo</a>
       </nav>
       <div class="flex items-center gap-4">
+        <a href="#" class="relative flex items-center justify-center w-12 h-12 rounded-full hover:opacity-50 transition-opacity" title="Carrito de compras (WooCommerce)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7"><path d="M16 10a4 4 0 0 1-8 0"></path><path d="M3.103 6.034h17.794"></path><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"></path></svg>
+        </a>
         <button onclick="toggleMenu()" class="lg:hidden relative flex items-center justify-center w-12 h-12 rounded-full hover:opacity-50 transition-opacity">
           <svg id="menu-icon-open" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
           <svg id="menu-icon-close" class="h-8 w-8 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -112,20 +115,20 @@
 
 <main class="flex-1 w-full bg-black text-white selection:bg-red-500 selection:text-white">
   <!-- Hero Banner -->
-  <section class="min-h-screen flex items-center justify-center pt-24 px-6 md:px-12">
-    <div class="w-full max-w-[1800px] grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-      <div class="flex flex-col items-start gap-8 z-10">
-        <h1 class="text-[12vw] md:text-[8vw] font-black uppercase leading-[0.85] tracking-tighter">
-          <span class="text-[#EF4444] block">ANTOJOS</span>
-          <span class="block">PERUANOS</span>
-          <span class="text-[#EF4444] block">EN BOXES.</span>
-        </h1>
-        <a href="boxes-de-regalo.html" class="bg-white text-black font-bold uppercase tracking-widest text-sm md:text-base px-10 py-5 rounded-full hover:bg-gray-200 transition-colors">
-          Ver los Boxes
-        </a>
-      </div>
-      <div class="relative w-full aspect-square md:aspect-[4/5] rounded-[3rem] overflow-hidden">
-        <img src="images/premium_box_hero.png" alt="Premium Box Hero" class="absolute inset-0 w-full h-full object-cover">
+  <section id="inicio" class="relative w-full min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden">
+    <div class="w-full px-6 md:px-12 relative z-10 flex flex-col justify-center h-full mt-24 md:mt-0 max-w-[1800px] mx-auto">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-12 w-full">
+        <div class="flex flex-col items-start min-w-[50%]">
+          <h1 class="text-[14vw] md:text-[7vw] lg:text-[7.5vw] xl:text-[8vw] font-black leading-[0.85] tracking-tighter uppercase max-w-full">
+            <span class="text-[#EF4444]">ANTOJOS</span> <br/>PERUANOS <br/><span class="text-[#EF4444] whitespace-nowrap">EN BOXES.</span>
+          </h1>
+          <a class="mt-8 md:mt-12 group flex items-center justify-center bg-white text-black font-black py-5 px-10 md:py-6 md:px-14 rounded-full text-title transition-all duration-300 hover:bg-[#EF4444] hover:text-white uppercase tracking-widest border border-white" href="boxes-de-regalo">
+            Ver los Boxes
+          </a>
+        </div>
+        <div class="relative aspect-[4/3] w-full max-w-[400px] md:max-w-[45vw] lg:max-w-[550px] rounded-[2rem] md:rounded-[3rem] overflow-hidden hover:scale-[1.02] transition-transform duration-700 ease-out shrink-0 mx-auto md:mx-0">
+          <img src="images/premium_box_hero.png" alt="Premium Box Hero" class="absolute inset-0 w-full h-full object-cover">
+        </div>
       </div>
     </div>
   </section>
