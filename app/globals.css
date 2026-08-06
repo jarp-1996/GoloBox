@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-golozin-blue: #0B2545;
+  --color-golozin-red: #E3001B;
+  --color-golozin-gray: #F8F9FA;
+  --color-golozin-cream: #FFFFFF;
+  --color-golozin-dark: #1F2937;
+  --color-golozin-whatsapp: #25D366;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-golozin-cream);
+  color: var(--color-golozin-dark);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float-delayed { animation: float 7s ease-in-out infinite 1.5s; }
+.animate-float-fast { animation: float 5s ease-in-out infinite 0.5s; }
+
+@keyframes marquee-lr {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee-lr {
+  animation: marquee-lr 35s linear infinite;
+}
+
