@@ -14,12 +14,12 @@ export default async function Home() {
       <main className="flex-1 w-full bg-black text-white selection:bg-red-500 selection:text-white">
         
         {/* ── Hero Banner (Beech Style: Giant Typography) ──────────────────────────────── */}
-        <section id="inicio" className="relative w-full min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden">
+        <section id="inicio" className="relative w-full min-h-[85vh] flex flex-col justify-center pt-24 pb-12 overflow-hidden">
           <div className="absolute inset-0 z-0">
             {/* Background elements if needed */}
           </div>
           
-          <div className="w-full px-6 md:px-12 relative z-10 flex flex-col justify-center h-full mt-24 md:mt-0">
+          <div className="w-full px-6 md:px-12 relative z-10 flex flex-col justify-center h-full mt-8 md:mt-0">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-12 w-full">
               
               {/* Contenido Izquierdo (Texto + Botón) */}
@@ -33,7 +33,7 @@ export default async function Home() {
                 <Link 
                   href="/producto/antojos-peruanos"
                   data-cursor="link"
-                  className="mt-8 md:mt-12 group flex items-center justify-center bg-white text-black font-black py-5 px-10 md:py-6 md:px-14 rounded-full text-title transition-all duration-300 hover:bg-[#EF4444] hover:text-white uppercase tracking-widest border border-white"
+                  className="mt-8 md:mt-12 group flex items-center justify-center bg-white text-black font-black py-5 px-10 md:py-6 md:px-14 rounded-full text-3xl md:text-4xl transition-all duration-300 hover:bg-[#EF4444] hover:text-white uppercase tracking-widest border border-white"
                 >
                   Ver los Boxes
                 </Link>

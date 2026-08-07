@@ -45,13 +45,13 @@ export default function CorporativoPage() {
       <main className="flex-1 w-full">
         {/* Hero Section */}
         <section className="relative w-full pt-48 pb-24 overflow-hidden border-b border-black">
-          <div className="w-full px-6 md:px-12 max-w-[1600px] mx-auto relative z-10">
+          <div className="w-full px-4 sm:px-12 md:px-24 lg:px-32 max-w-[1400px] mx-auto relative z-10">
             <h1 className="text-[12vw] md:text-[8vw] lg:text-[7vw] font-black leading-[0.85] tracking-tighter uppercase break-words">
               B2B <br/> <span className="text-[#EF4444]">CORPORATIVO</span>
             </h1>
             <div className="mt-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
               <p className="text-2xl text-gray-500 max-w-2xl font-light leading-relaxed uppercase tracking-widest">
-                Soluciones premium exclusivas para impresionar a gran escala.
+                Soluciones premium exclusivas para los <span className="font-black text-[#EF4444]">amantes del dulce</span>
               </p>
               <a
                 href={getWhatsAppLink('Hola, me gustaría recibir asesoría general sobre Regalos Corporativos.')}
@@ -68,19 +68,19 @@ export default function CorporativoPage() {
 
         {/* Solutions List (Brutalist Rows) */}
         <section className="py-24">
-          <div className="w-full px-6 md:px-12 max-w-[1600px] mx-auto flex flex-col">
+          <div className="w-full px-4 sm:px-12 md:px-24 lg:px-32 max-w-[1400px] mx-auto flex flex-col">
             {solutions.map((sol, i) => (
-              <div key={i} className="group border-b border-black/10 py-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 hover:bg-black/5 transition-colors cursor-pointer">
+              <div key={i} className={`group py-12 px-8 md:px-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 transition-colors cursor-pointer ${i % 2 === 0 ? 'bg-gray-100' : 'bg-white'} hover:bg-gray-200`}>
                 <div className="flex-1">
                   <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight mb-4 group-hover:text-[#EF4444] transition-colors">{sol.title}</h3>
-                  <p className="text-xl md:text-2xl text-gray-500 max-w-3xl">{sol.description}</p>
+                  <p className="text-xl md:text-2xl text-gray-500 max-w-2xl">{sol.description}</p>
                 </div>
                 <a
                   href={getWhatsAppLink(sol.msg)}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cursor="button"
-                  className="shrink-0 flex items-center justify-center w-20 h-20 rounded-full border-2 border-black group-hover:bg-[#EF4444] group-hover:border-[#EF4444] group-hover:text-white transition-all"
+                  className="shrink-0 flex items-center justify-center w-20 h-20 rounded-full border-2 border-black bg-white group-hover:bg-[#EF4444] group-hover:border-[#EF4444] group-hover:text-white transition-all"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />

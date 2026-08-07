@@ -24,17 +24,11 @@ export function ProductDetail({ product }: { product: Product }) {
   };
 
   return (
-    <div className="flex flex-col font-sans pt-32 pb-24 selection:bg-red-500 selection:text-white">
+    <div className="flex flex-col font-sans pt-16 md:pt-20 pb-12 selection:bg-red-500 selection:text-white">
       
-      <div className="w-full text-center mb-16">
-        <h1 className="text-[12vw] md:text-[8vw] lg:text-[6vw] font-black leading-[0.85] tracking-tighter uppercase break-words px-4">
-          {product.name}
-        </h1>
-      </div>
-
-      <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 w-full">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
         {/* Left: Product Image */}
-        <div className="w-full lg:w-3/5">
+        <div className="w-full lg:w-1/2">
           <div className="relative aspect-square bg-[#F3F4F6] rounded-[3rem] flex items-center justify-center p-8 overflow-hidden group">
             
             {/* Status badges Brutalist style */}
@@ -68,10 +62,14 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
 
         {/* Right: Product Info & Brutalist Action */}
-        <div className="w-full lg:w-2/5 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 flex flex-col justify-start">
           
-          <div className="flex items-end gap-6 mb-12 border-b-4 border-black pb-8">
-            <p className="text-7xl lg:text-8xl font-black text-black tracking-tighter">
+          <h1 className="text-5xl lg:text-7xl font-black leading-[0.9] tracking-tighter uppercase break-words mb-6">
+            {product.name}
+          </h1>
+
+          <div className="flex items-end gap-6 mb-8 border-b-4 border-black pb-6">
+            <p className="text-5xl lg:text-6xl font-black text-black tracking-tighter">
               S/{product.price.toFixed(0)}
             </p>
             {product.originalPrice && (
@@ -81,13 +79,13 @@ export function ProductDetail({ product }: { product: Product }) {
             )}
           </div>
 
-          <p className="text-body text-gray-600 leading-relaxed mb-12 font-medium">
+          <p className="text-body text-gray-600 leading-relaxed mb-8 font-medium">
             {product.description}
           </p>
 
           {/* Qué Incluye Section */}
           {product.contents && product.contents.length > 0 && (
-            <div className="mb-16">
+            <div className="mb-10">
               <h3 className="text-title font-black text-black mb-6 uppercase tracking-tight">
                 INCLUYE:
               </h3>

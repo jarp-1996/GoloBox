@@ -45,8 +45,7 @@ export function Footer() {
         <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 text-micro font-bold uppercase tracking-widest text-gray-600 mb-8 px-4">
           <span>© {new Date().getFullYear()} GOLO-BOX TODOS LOS DERECHOS RESERVADOS</span>
           <div className="flex gap-8">
-            <Link href="/terminos" className="hover:text-white transition-colors">Términos</Link>
-            <Link href="/privacidad" className="hover:text-white transition-colors">Privacidad</Link>
+            <Link href="/terminos-y-privacidad" className="hover:text-white transition-colors">Términos y Privacidad</Link>
           </div>
         </div>
         

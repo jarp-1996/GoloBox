@@ -77,13 +77,12 @@ export const metadata: Metadata = {
   category: 'ecommerce',
 };
 
-import { CursorFollower } from '@/components/CursorFollower';
+
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="es" className={`${inter.variable} ${poppins.variable}`}>
       <body suppressHydrationWarning className="bg-[#FDFCFB] text-gray-900 font-sans antialiased">
-        <CursorFollower />
         <ToastProvider>
           <CartProvider>
             {children}
