@@ -31,7 +31,7 @@ export default async function BoxesDeRegaloPage() {
         {/* Product List (Single Column) */}
         <section className="pt-12 pb-12 md:pt-16 md:pb-16">
           <div className="w-full px-6 md:px-12 mx-auto">
-            <div className="flex flex-col gap-16 md:gap-24 max-w-3xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-[1600px] mx-auto">
               {boxes.map((box) => (
                   <div key={box.id} className="group flex flex-col items-center text-center">
                     <Link href={`/producto/${box.id}`} data-cursor="product" className="block w-full relative aspect-[4/5] bg-gray-900 overflow-hidden rounded-[2rem] mb-8">

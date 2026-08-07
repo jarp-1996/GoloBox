@@ -2,12 +2,15 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Product } from '@/lib/catalog';
 import { useCart } from '@/components/CartContext';
 import { useToast } from '@/components/ToastContext';
-import { Check } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 export function ProductDetail({ product }: { product: Product }) {
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
   const { addToCart } = useCart();
@@ -22,10 +25,32 @@ export function ProductDetail({ product }: { product: Product }) {
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 800);
   };
+  
+  // Determinar la categoría y ruta base para el breadcrumb
+  const isBox = ['antojos-peruanos', 'sabor-americano', 'chocolates-peruanos'].includes(product.id);
+  const isPack = ['pack-sorpresitas', 'mesa-cumpleanera'].includes(product.id);
+  
+  const categoryName = isBox ? 'Boxes' : (isPack ? 'Packs' : 'Productos');
+  const categoryPath = isBox ? '/boxes-de-regalo' : (isPack ? '/packs-cumpleanos' : '/');
 
   return (
     <div className="flex flex-col font-sans pt-16 md:pt-20 pb-12 selection:bg-red-500 selection:text-white">
       
+      {/* Breadcrumb Navigation */}
+      <nav className="flex flex-wrap items-center gap-2 text-gray-400 font-bold uppercase tracking-widest text-xs md:text-sm mb-6 md:mb-8 w-fit">
+        <Link href="/" className="hover:text-black transition-colors">
+          Inicio
+        </Link>
+        <ChevronRight className="w-4 h-4" />
+        <Link href={categoryPath} className="hover:text-black transition-colors">
+          {categoryName}
+        </Link>
+        <ChevronRight className="w-4 h-4" />
+        <span className="text-black font-black">
+          {product.name}
+        </span>
+      </nav>
+
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
         {/* Left: Product Image */}
         <div className="w-full lg:w-1/2">

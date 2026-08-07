@@ -12,16 +12,46 @@ export function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
 
   useEffect(() => {
     // Cerrar menú móvil al cambiar de ruta
     setIsMobileMenuOpen(false);
+    
+    if (pathname !== '/') {
+      setIsScrolledPastHero(false);
+      return;
+    }
+
+    const handleScroll = () => {
+      // El hero mide aprox 85vh. Cambiamos color cuando baja de 80vh.
+      const threshold = window.innerHeight * 0.80;
+      setIsScrolledPastHero(window.scrollY > threshold);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // chequear estado inicial
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname]);
+
+  // Determinar si la página actual tiene fondo blanco
+  const isWhiteBackground = 
+    pathname.startsWith('/producto') || 
+    pathname === '/corporativo' || 
+    pathname === '/terminos-y-privacidad' || 
+    pathname === '/checkout' ||
+    pathname.startsWith('/admin') ||
+    (pathname === '/' && isScrolledPastHero);
+
+  const textColorClass = isWhiteBackground ? 'text-black' : 'text-white';
+  const logoColorClass = isWhiteBackground ? 'text-black' : 'text-white'; // Opcional, hereda igual
+  const borderColorClass = isWhiteBackground ? 'border-black/10' : 'border-white/10';
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 pointer-events-none mix-blend-difference text-white">
-        <div className="w-full px-6 md:px-12 pointer-events-auto">
+      <header className={`fixed top-0 w-full z-50 bg-transparent ${textColorClass} transition-all duration-300`}>
+        <div className="w-full px-6 md:px-12">
           <div className="flex items-center justify-between h-[100px]">
             
             {/* Left: Logo */}
@@ -43,7 +73,7 @@ export function Header() {
                   Boxes <ChevronDown className="w-5 h-5" />
                 </Link>
                 {/* Dropdown brutalista */}
-                <div className="absolute top-full left-0 w-64 bg-white text-black p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-2 border-black">
+                <div className="absolute top-[70px] left-0 w-64 bg-white text-black p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-2 border-black">
                   <div className="flex flex-col gap-4">
                     <Link href="/producto/antojos-peruanos" className="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Antojos Peruanos</Link>
                     <Link href="/producto/sabor-americano" className="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Sabor Americano</Link>
@@ -58,7 +88,7 @@ export function Header() {
                   Packs <ChevronDown className="w-5 h-5" />
                 </Link>
                 {/* Dropdown brutalista */}
-                <div className="absolute top-full left-0 w-64 bg-white text-black p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-2 border-black">
+                <div className="absolute top-[70px] left-0 w-64 bg-white text-black p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-2 border-black">
                   <div className="flex flex-col gap-4">
                     <Link href="/producto/pack-sorpresitas" className="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Pack Sorpresitas</Link>
                     <Link href="/producto/mesa-cumpleanera" className="font-bold text-lg hover:text-red-600 transition-colors uppercase tracking-tight">Mesa Cumpleañera</Link>

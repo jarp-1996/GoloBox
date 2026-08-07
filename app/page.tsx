@@ -19,8 +19,8 @@ export default async function Home() {
             {/* Background elements if needed */}
           </div>
           
-          <div className="w-full px-6 md:px-12 relative z-10 flex flex-col justify-center h-full mt-8 md:mt-0">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-12 w-full">
+          <div className="w-full px-6 md:px-12 relative z-10 flex flex-col justify-center h-full mt-8 md:mt-4">
+            <div className="flex flex-col md:flex-row-reverse md:items-center justify-between gap-12 w-full">
               
               {/* Contenido Izquierdo (Texto + Botón) */}
               <div className="flex flex-col items-start min-w-[50%]">
@@ -31,7 +31,7 @@ export default async function Home() {
                 </h1>
                 
                 <Link 
-                  href="/producto/antojos-peruanos"
+                  href="/boxes-de-regalo"
                   data-cursor="link"
                   className="mt-8 md:mt-12 group flex items-center justify-center bg-white text-black font-black py-5 px-10 md:py-6 md:px-14 rounded-full text-3xl md:text-4xl transition-all duration-300 hover:bg-[#EF4444] hover:text-white uppercase tracking-widest border border-white"
                 >
@@ -42,7 +42,7 @@ export default async function Home() {
               {/* Imagen Derecha */}
               <div className="relative aspect-[4/3] w-full max-w-[400px] md:max-w-[45vw] lg:max-w-[550px] rounded-[2rem] md:rounded-[3rem] overflow-hidden hover:scale-[1.02] transition-transform duration-700 ease-out shrink-0 mx-auto md:mx-0">
                 <Image 
-                  src="/images/premium_box_hero.png" 
+                  src="/images/boceto_ejemplo_final_v7.jpg" 
                   alt="Premium Box" 
                   fill 
                   className="object-cover"
@@ -122,23 +122,33 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── B2B Banner (Brutalist Corporate) ──────────────────────────────── */}
-        <section id="corporativo" className="relative w-full bg-white text-black py-16 md:py-24 flex flex-col items-center justify-center text-center px-6">
-          <h2 className="text-[8vw] md:text-[6vw] font-black leading-none tracking-tighter uppercase mb-12">
-            REGALOS <br /> CORPORATIVOS
-          </h2>
-          <p className="text-body text-gray-500 max-w-3xl mb-16 font-light">
-            Sal del clásico corporativo. Regala nuestros boxes y sorprende de verdad a tu equipo o clientes.
-          </p>
-          <a
-            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '51967171097'}?text=${encodeURIComponent('Hola, me gustaría cotizar regalos corporativos B2B.')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="link"
-            className="group flex items-center justify-center bg-black text-white font-black py-8 px-20 rounded-full text-title transition-all duration-300 hover:bg-[#EF4444] hover:text-white uppercase tracking-widest w-full md:w-auto"
-          >
-            Cotizar para mi empresa
-          </a>
+        {/* ── B2B Banner (Brutalist Corporate - Opción 3) ──────────────────────────────── */}
+        <section id="corporativo" className="relative w-full bg-[#EF4444] text-white py-32 md:py-48 flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+          
+          {/* Imágenes Flotantes (Ocultas en celular muy pequeño, visibles en tablet/desktop) */}
+          <div className="absolute top-[10%] left-[5%] md:left-[10%] w-[150px] md:w-[250px] aspect-square hidden sm:block opacity-90 hover:scale-110 hover:-rotate-6 transition-transform duration-700 z-0 shadow-2xl rounded-2xl overflow-hidden">
+            <Image src="/images/boceto_ejemplo_final_v2.jpg" alt="Regalo Corporativo" fill className="object-cover" />
+          </div>
+          
+          <div className="absolute bottom-[10%] right-[5%] md:right-[10%] w-[180px] md:w-[300px] aspect-[4/3] hidden sm:block opacity-90 hover:scale-110 hover:rotate-6 transition-transform duration-700 z-0 shadow-2xl rounded-2xl overflow-hidden">
+            <Image src="/images/premium_box_hero.png" alt="Caja Premium" fill className="object-cover" />
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center">
+            <h2 className="text-[12vw] md:text-[8vw] font-black leading-[0.85] tracking-tighter uppercase mb-8">
+              IMPRESIONA <br /> A TU EQUIPO
+            </h2>
+            <p className="text-xl md:text-2xl text-white/90 max-w-2xl mb-12 font-medium tracking-wide">
+              Sal del clásico corporativo. Regala nuestros boxes y sorprende de verdad a tu equipo o clientes.
+            </p>
+            <Link
+              href="/corporativo"
+              data-cursor="link"
+              className="group flex items-center justify-center bg-white text-black font-black py-6 px-12 md:px-16 rounded-full text-lg md:text-2xl transition-all duration-300 hover:bg-black hover:text-white uppercase tracking-widest w-full md:w-auto shadow-2xl"
+            >
+              Ver nuestras experiencias
+            </Link>
+          </div>
         </section>
       </main>
 

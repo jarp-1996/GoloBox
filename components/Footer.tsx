@@ -8,7 +8,7 @@ const WA_URL = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hola, me g
 
 export function Footer() {
   return (
-    <footer className="bg-[#0a0a0a] text-white py-12 overflow-hidden border-t border-white/10 flex flex-col justify-between relative z-10">
+    <footer className="bg-[#0a0a0a] text-white pt-12 pb-6 md:pb-8 overflow-hidden border-t border-white/10 flex flex-col justify-between relative z-10">
       
       <div className="w-full px-6 md:px-12 max-w-[1800px] mx-auto">
 
@@ -16,7 +16,15 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-title font-black uppercase tracking-tight mb-6">GOLO-BOX</h3>
+            <h3 className="text-title font-black uppercase tracking-tight mb-6 flex items-center gap-4 w-fit">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-16 h-16 md:w-20 md:h-20 shrink-0">
+                <polygon points="50,10 85,30 50,50 15,30" fill="#F87171" />
+                <polygon points="15,30 50,50 50,90 15,70" fill="#EF4444" />
+                <polygon points="50,50 85,30 85,70 50,90" fill="#B91C1C" />
+                <text transform="translate(67.5, 60) skewY(-30)" fontFamily="Arial, Helvetica, sans-serif" fontWeight="900" fontSize="34" fill="#FFFFFF" textAnchor="middle" dominantBaseline="central">G</text>
+              </svg>
+              GOLO-BOX
+            </h3>
             <p className="text-gray-400 max-w-sm text-caption font-light leading-relaxed">
               Elevando el estándar de los regalos corporativos y las sorpresas personales en todo el Perú.
             </p>
@@ -42,7 +50,7 @@ export function Footer() {
 
       {/* Bottom Section: Massive Brand Name & Copyright */}
       <div className="w-full px-6 md:px-12 mt-12 flex flex-col">
-        <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 text-micro font-bold uppercase tracking-widest text-gray-600 mb-8 px-4">
+        <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 text-micro font-bold uppercase tracking-widest text-gray-600 mb-0 px-4">
           <span>© {new Date().getFullYear()} GOLO-BOX TODOS LOS DERECHOS RESERVADOS</span>
           <div className="flex gap-8">
             <Link href="/terminos-y-privacidad" className="hover:text-white transition-colors">Términos y Privacidad</Link>

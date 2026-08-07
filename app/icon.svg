@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <polygon points="50,10 85,30 50,50 15,30" fill="#F87171" />
+  <polygon points="15,30 50,50 50,90 15,70" fill="#EF4444" />
+  <polygon points="50,50 85,30 85,70 50,90" fill="#B91C1C" />
+  <text transform="translate(67.5, 60) skewY(-30)" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="34" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">G</text>
+</svg>
