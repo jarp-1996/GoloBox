@@ -72,7 +72,7 @@ export function CheckoutModal({ isOpen, onClose, onComplete }: { isOpen: boolean
               <button 
                 type="button"
                 onClick={() => setDeliveryType('delivery')}
-                className={`flex flex-col items-center justify-center gap-2 p-3 border-2 rounded-xl transition-all ${deliveryType === 'delivery' ? 'border-[#E3001B] bg-red-50 text-[#E3001B]' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                className={`flex flex-col items-center justify-center gap-2 p-3 border-2 rounded-xl transition-all ${deliveryType === 'delivery' ? 'border-[#1F2937] bg-red-50 text-[#1F2937]' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
               >
                 <MapPin className="h-6 w-6" />
                 <span className="font-semibold text-sm">Delivery</span>
@@ -80,7 +80,7 @@ export function CheckoutModal({ isOpen, onClose, onComplete }: { isOpen: boolean
               <button 
                 type="button"
                 onClick={() => setDeliveryType('pickup')}
-                className={`flex flex-col items-center justify-center gap-2 p-3 border-2 rounded-xl transition-all ${deliveryType === 'pickup' ? 'border-[#E3001B] bg-red-50 text-[#E3001B]' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                className={`flex flex-col items-center justify-center gap-2 p-3 border-2 rounded-xl transition-all ${deliveryType === 'pickup' ? 'border-[#1F2937] bg-red-50 text-[#1F2937]' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
               >
                 <Store className="h-6 w-6" />
                 <span className="font-semibold text-sm">Recojo en Tienda</span>
@@ -90,22 +90,22 @@ export function CheckoutModal({ isOpen, onClose, onComplete }: { isOpen: boolean
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo *</label>
-                <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#E3001B] focus:border-transparent outline-none transition-all" placeholder="Juan Pérez" />
+                <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#1F2937] focus:border-transparent outline-none transition-all" placeholder="Juan Pérez" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Celular / WhatsApp *</label>
-                <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#E3001B] focus:border-transparent outline-none transition-all" placeholder="987654321" />
+                <input required type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#1F2937] focus:border-transparent outline-none transition-all" placeholder="987654321" />
               </div>
               
               {deliveryType === 'delivery' && (
                 <>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Dirección de Entrega *</label>
-                    <input required type="text" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#E3001B] focus:border-transparent outline-none transition-all" placeholder="Av. Principal 123, Distrito" />
+                    <input required type="text" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#1F2937] focus:border-transparent outline-none transition-all" placeholder="Av. Principal 123, Distrito" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
-                    <input type="text" value={formData.reference} onChange={e => setFormData({...formData, reference: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#E3001B] focus:border-transparent outline-none transition-all" placeholder="Cerca al parque, frente a tienda..." />
+                    <input type="text" value={formData.reference} onChange={e => setFormData({...formData, reference: e.target.value})} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#1F2937] focus:border-transparent outline-none transition-all" placeholder="Cerca al parque, frente a tienda..." />
                   </div>
                 </>
               )}
@@ -117,7 +117,7 @@ export function CheckoutModal({ isOpen, onClose, onComplete }: { isOpen: boolean
         <div className="p-4 sm:p-6 border-t border-gray-100 bg-gray-50">
           <div className="flex justify-between items-center mb-4 text-sm">
             <span className="text-gray-500 font-medium">Total Estimado:</span>
-            <span className="text-2xl font-bold text-[#E3001B]">S/ {totalPrice.toFixed(2)}</span>
+            <span className="text-2xl font-bold text-[#1F2937]">S/ {totalPrice.toFixed(2)}</span>
           </div>
           <button 
             type="submit" 

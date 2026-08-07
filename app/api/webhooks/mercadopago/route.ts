@@ -31,6 +31,35 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true });
     }
 
+    // 1. Validar Firma (Webhook Secret de Mercado Pago)
+    const webhookSecret = process.env.MP_WEBHOOK_SECRET;
+    const xSignature = req.headers.get('x-signature');
+    const xRequestId = req.headers.get('x-request-id');
+
+    if (webhookSecret && xSignature && xRequestId) {
+      const url = new URL(req.url);
+      const dataID = url.searchParams.get('data.id') || paymentId;
+      
+      const parts = xSignature.split(',');
+      let ts, v1;
+      for (const part of parts) {
+        const [key, value] = part.split('=');
+        if (key === 'ts') ts = value;
+        if (key === 'v1') v1 = value;
+      }
+      
+      if (ts && v1) {
+        const manifest = `id:${dataID};request-id:${xRequestId};ts:${ts};`;
+        const crypto = require('crypto');
+        const hmac = crypto.createHmac('sha256', webhookSecret).update(manifest).digest('hex');
+        
+        if (hmac !== v1) {
+          console.error('❌ Firma de Mercado Pago inválida.');
+          return NextResponse.json({ error: 'Firma inválida' }, { status: 403 });
+        }
+      }
+    }
+
     // Verificar el pago directamente con la API de MP (no confiamos en el frontend)
     const paymentApi = new Payment(client);
     const paymentData = await paymentApi.get({ id: paymentId });
@@ -46,6 +75,16 @@ export async function POST(req: Request) {
 
     if (findError || !order) {
       console.error('Pedido no encontrado para payment_id:', paymentId);
+      return NextResponse.json({ ok: true });
+    }
+
+    // 2. VERIFICACIÓN ESTRICTA DE MONTO: El monto pagado en MP debe coincidir con el total de la orden
+    const paidAmount = Number(paymentData.transaction_amount);
+    const orderTotal = Number(order.total_amount);
+
+    if (paymentData.status === 'approved' && Math.abs(paidAmount - orderTotal) > 0.01) {
+      console.error(`❌ Alerta de seguridad: El monto pagado en MP (${paidAmount}) no coincide con el total de la orden (${orderTotal}).`);
+      // No actualizamos la orden a pagada si el monto es incorrecto
       return NextResponse.json({ ok: true });
     }
 

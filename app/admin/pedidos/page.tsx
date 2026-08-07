@@ -26,10 +26,10 @@ export default async function AdminPedidosPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-[#0B2545] text-white px-6 py-4 flex items-center justify-between shadow-lg">
+      <header className="bg-[#991B1B] text-white px-6 py-4 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
           <span className="font-black text-xl tracking-tight">GOLOZIN</span>
-          <span className="text-[#E3001B] font-black text-xs bg-white/10 px-2 py-1 rounded-lg">ADMIN</span>
+          <span className="text-[#1F2937] font-black text-xs bg-white/10 px-2 py-1 rounded-lg">ADMIN</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link href="/admin" className="text-blue-200 hover:text-white transition-colors">Dashboard</Link>

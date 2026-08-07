@@ -21,12 +21,14 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<'yape' | 'tarjeta'>('yape');
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [addCard, setAddCard] = useState(false);
+  const [cardMessage, setCardMessage] = useState('');
 
-  // Recargo 5% si es tarjeta
-  const subtotal = totalPrice;
+  // Upsell y Recargos
+  const upsellAmount = addCard ? 10 : 0;
+  const subtotal = totalPrice + upsellAmount;
   const surcharge = paymentMethod === 'tarjeta' ? subtotal * 0.05 : 0;
   const finalTotal = subtotal + surcharge;
-
   const waNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '51967171097';
   
   const handleCopyAmount = () => {
@@ -53,7 +55,7 @@ export default function CheckoutPage() {
           <p className="text-gray-500 mb-8">Tu pedido mayorista ha sido procesado. Nos comunicaremos contigo por WhatsApp para coordinar el envío.</p>
           <button 
             onClick={() => router.push('/')}
-            className="w-full bg-[#0B2545] text-white font-bold py-4 rounded-xl"
+            className="w-full bg-[#991B1B] text-white font-bold py-4 rounded-xl"
           >
             Volver a la tienda
           </button>
@@ -85,14 +87,49 @@ export default function CheckoutPage() {
             ))}
           </div>
 
+          <div className="mb-8 border-t border-gray-100 pt-6">
+            <div className="p-4 border border-[#5F4B8B]/20 bg-[#5F4B8B]/5 rounded-2xl transition-colors">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={addCard} 
+                  onChange={(e) => setAddCard(e.target.checked)}
+                  className="mt-1 w-5 h-5 accent-[#5F4B8B] cursor-pointer"
+                />
+                <div className="flex-1">
+                  <p className="font-bold text-gray-900">Agregar Tarjeta de Felicitación (+ S/ 10.00)</p>
+                  <p className="text-sm text-gray-500 mt-1">Incluye un mensaje personalizado impreso en una linda tarjeta fiestera.</p>
+                </div>
+              </label>
+              
+              {addCard && (
+                <div className="mt-4 pl-8">
+                  <textarea
+                    value={cardMessage}
+                    onChange={(e) => setCardMessage(e.target.value)}
+                    placeholder="Escribe aquí tu mensaje (ej. ¡Feliz Cumpleaños Carlos!)"
+                    className="w-full p-3 rounded-xl border border-gray-200 text-sm focus:ring-[#5F4B8B] focus:border-[#5F4B8B] outline-none bg-white"
+                    rows={3}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="border-t border-gray-100 pt-6 space-y-3">
+            {addCard && (
+              <div className="flex justify-between text-[#5F4B8B] font-medium mb-2">
+                <span>Tarjeta Personalizada</span>
+                <span>S/ 10.00</span>
+              </div>
+            )}
             <div className="flex justify-between text-gray-500">
               <span>Subtotal</span>
               <span>S/ {subtotal.toFixed(2)}</span>
             </div>
             {paymentMethod === 'tarjeta' && (
-              <div className="flex justify-between text-[#E3001B] font-medium">
-                <span>Recargo por tarjeta (5%)</span>
+              <div className="flex justify-between text-gray-500 font-medium">
+                <span>Tarifa de procesamiento</span>
                 <span>S/ {surcharge.toFixed(2)}</span>
               </div>
             )}
@@ -187,7 +224,7 @@ export default function CheckoutPage() {
                 </button>
                 
                 <a 
-                  href={`https://wa.me/${waNumber}?text=${encodeURIComponent(`Hola, acabo de yapear S/ ${finalTotal.toFixed(2)} por mi pedido B2B. Adjunto el comprobante.`)}`}
+                  href={`https://wa.me/${waNumber}?text=${encodeURIComponent(`Hola, acabo de yapear S/ ${finalTotal.toFixed(2)} por mi pedido. Adjunto el comprobante.${addCard ? `\n\nTarjeta Personalizada incluida.\nMensaje: "${cardMessage}"` : ''}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => clearCart()}
@@ -202,10 +239,9 @@ export default function CheckoutPage() {
           {/* TARJETA FLOW (MercadoPago) */}
           {paymentMethod === 'tarjeta' && (
             <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 animate-in fade-in slide-in-from-bottom-4">
-              <div className="bg-[#009EE3]/10 text-[#009EE3] p-4 rounded-xl mb-6 text-sm flex gap-3 items-start">
-                <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+              <div className="bg-gray-50 text-gray-500 p-4 rounded-xl mb-6 text-sm flex gap-3 items-start border border-gray-100">
                 <p>
-                  <strong>¿Por qué el recargo?</strong> Las tarjetas cobran comisión. Para mantener nuestros <strong>precios de mayorista</strong>, este cargo lo asume el método de pago. Puedes usar Yape para evitarlo.
+                  <strong>Pago seguro garantizado.</strong> Se aplica una pequeña tarifa de procesamiento por el uso de tarjeta. (Opcional: usa Yape sin tarifas adicionales).
                 </p>
               </div>
               
@@ -243,6 +279,13 @@ export default function CheckoutPage() {
                       body: JSON.stringify({
                         ...dataToSend,
                         description: 'Pedido Mayorista Golozin',
+                        items: items.map(item => ({
+                          id: item.id,
+                          name: item.name,
+                          quantity: item.quantity,
+                          price: item.price,
+                          image: item.image
+                        })),
                       }),
                     });
                     const data = await res.json();

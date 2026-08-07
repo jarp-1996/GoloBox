@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Product } from '@/lib/catalog';
 import { useCart } from './CartContext';
 import { useToast } from './ToastContext';
-import { Heart, ShoppingCart, Plus, Minus } from 'lucide-react';
+import { Heart, ShoppingCart, Plus, Minus, Check } from 'lucide-react';
 
 // WhatsApp SVG icon reutilizable
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -62,6 +62,7 @@ export function ProductCard({
   const { showToast } = useToast();
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
 
   const waNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '51967171097';
   const units = detectPackUnits(product.name);
@@ -103,24 +104,26 @@ export function ProductCard({
     addToCart(product, quantity);
     showToast(`¡${quantity}x ${product.name} al carrito!`);
     setQuantity(1); // reiniciar cantidad después de agregar
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 800);
   };
 
   // ─── VISTA LISTA ────────────────────────────────────────────────────────────
   if (viewStyle === 'list') {
     return (
-      <div className={`bg-white flex flex-row group p-4 relative rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 ${!product.inStock ? 'opacity-75' : ''}`}>
+      <div className={`bg-white font-inter flex flex-row group p-4 relative rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 ${!product.inStock ? 'opacity-75' : ''}`}>
         {/* Imagen */}
         <Link href={`/producto/${product.id}?segment=${product.segment}`} className="relative w-[130px] h-[130px] flex-shrink-0 p-2 bg-white flex items-center justify-center mr-5">
           <div className="absolute top-0 left-0 flex flex-col gap-1 z-10">
             {!product.inStock && (
-              <div className="bg-gray-800 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm uppercase">Agotado</div>
+              <div className="bg-gray-800 text-white text-micro font-bold px-2 py-1 rounded shadow-sm uppercase">Agotado</div>
             )}
             {isBestSeller && product.inStock && (
-              <div className="bg-amber-400 text-amber-900 text-[9px] font-black px-2 py-1 rounded shadow-sm uppercase tracking-wide">⭐ Más pedido</div>
+              <div className="bg-[#A3E635] text-[#365314] text-micro font-black px-2 py-1 rounded shadow-sm uppercase tracking-wide">⭐ Más pedido</div>
             )}
           </div>
-          <button onClick={handleToggleFavorite} className="absolute top-0 right-0 z-20 p-1.5 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-400 hover:text-[#E3001B] transition-colors">
-            <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#E3001B] text-[#E3001B]' : ''}`} />
+          <button onClick={handleToggleFavorite} className="absolute top-0 right-0 z-20 p-1.5 bg-white/80 hover:bg-white rounded-full shadow-sm text-gray-400 hover:text-[#1F2937] transition-colors">
+            <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#1F2937] text-[#1F2937]' : ''}`} />
           </button>
           <div className={`relative w-full h-full transition-transform duration-300 ${product.inStock ? 'group-hover:scale-105' : 'grayscale'}`}>
             <Image src={product.image} alt={product.name} fill sizes="130px" className="object-contain" referrerPolicy="no-referrer" />
@@ -129,16 +132,13 @@ export function ProductCard({
 
         {/* Contenido */}
         <div className="flex flex-col justify-center flex-grow min-w-0">
-          <Link href={`/producto/${product.id}?segment=${product.segment}`} className="text-sm font-bold text-gray-800 mb-1 hover:text-[#E3001B] transition-colors line-clamp-2">
+          <Link href={`/producto/${product.id}?segment=${product.segment}`} className="text-caption font-bold text-gray-800 mb-1 hover:text-[#1F2937] transition-colors line-clamp-2">
             {product.name}
           </Link>
-          <p className="text-xs text-gray-400 mb-2">{product.brand}</p>
+          <p className="text-micro text-gray-400 mb-2">{product.brand}</p>
           <div className="flex items-baseline gap-2 flex-wrap">
-            <span className={`text-lg font-black ${product.inStock ? 'text-[#E3001B]' : 'text-gray-400'}`}>
+            <span className={`text-title font-black ${product.inStock ? 'text-[#1F2937]' : 'text-gray-400'}`}>
               {sol(product.price)}
-            </span>
-            <span className="text-xs text-gray-400">
-              {isPack ? `el display · ${sol(pricePerUnit)} c/u` : 'por unidad'}
             </span>
           </div>
         </div>
@@ -154,7 +154,7 @@ export function ProductCard({
                 >
                   <Minus className="w-3 h-3" />
                 </button>
-                <span className="text-xs font-bold text-gray-700 w-6 text-center">{quantity}</span>
+                <span className="text-caption font-bold text-gray-700 w-6 text-center">{quantity}</span>
                 <button
                   onClick={(e) => { e.preventDefault(); setQuantity(quantity + 1); }}
                   className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-md transition-colors"
@@ -164,10 +164,14 @@ export function ProductCard({
               </div>
               <button
                 onClick={(e) => { e.preventDefault(); handleAddToCart(e); }}
-                className="flex items-center justify-center gap-1.5 bg-[#E3001B] hover:bg-[#c40017] text-white text-[13px] font-bold py-2 px-3 rounded-lg transition-all hover:scale-105 shadow-md whitespace-nowrap"
+                className={`flex items-center justify-center gap-1.5 text-white text-caption font-bold py-2 px-4 rounded-xl transition-all duration-300 transform active:scale-95 shadow-sm hover:shadow-md whitespace-nowrap ${
+                  isAdded 
+                    ? 'bg-[#10B981] hover:bg-[#059669] scale-[1.03]' 
+                    : 'bg-[#111111] hover:bg-[#EF4444] hover:scale-[1.03]'
+                }`}
               >
-                <ShoppingCart className="w-3 h-3" />
-                Añadir
+                {isAdded ? <Check className="w-3 h-3" /> : <ShoppingCart className="w-3 h-3" />}
+                {isAdded ? 'Añadido' : 'Añadir'}
               </button>
             </>
           ) : (
@@ -180,21 +184,21 @@ export function ProductCard({
 
   // ─── VISTA GRILLA ────────────────────────────────────────────────────────────
   return (
-    <div className={`bg-white flex flex-col h-full group p-4 relative rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 ${!product.inStock ? 'opacity-75' : ''}`}>
+    <div className={`bg-white font-inter flex flex-col h-full group p-4 relative rounded-[2rem] border-2 border-transparent hover:border-gray-100 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-500 ${!product.inStock ? 'opacity-75' : ''}`}>
 
       {/* Imagen */}
-      <Link href={`/producto/${product.id}?segment=${product.segment}`} className="relative aspect-square bg-white rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+      <Link href={`/producto/${product.id}?segment=${product.segment}`} className="relative aspect-square bg-white rounded-[1.5rem] mb-5 flex items-center justify-center overflow-hidden">
         {/* Badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+        <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
           {!product.inStock ? (
-            <div className="bg-gray-800 text-white text-[9px] font-bold px-2 py-1 rounded-lg shadow-sm uppercase">Agotado</div>
+            <div className="bg-gray-800 text-white text-micro font-bold px-2 py-1 rounded-lg shadow-sm uppercase">Agotado</div>
           ) : (
             <>
               {isBestSeller && (
-                <div className="bg-amber-400 text-amber-900 text-[9px] font-black px-2 py-1 rounded-lg shadow-sm uppercase tracking-wide">⭐ Más pedido</div>
+                <div className="bg-[#A3E635] text-[#365314] text-micro font-black px-2 py-1 rounded-lg shadow-sm uppercase tracking-wide">⭐ Más pedido</div>
               )}
               {product.originalPrice && (
-                <div className="bg-[#E3001B] text-white text-[9px] font-bold px-2 py-1 rounded-lg shadow-sm">Oferta</div>
+                <div className="bg-[#1F2937] text-white text-micro font-bold px-2 py-1 rounded-lg shadow-sm">Oferta</div>
               )}
             </>
           )}
@@ -202,12 +206,12 @@ export function ProductCard({
         {/* Favorito */}
         <button
           onClick={handleToggleFavorite}
-          className="absolute top-2 right-2 z-20 p-1.5 bg-white hover:bg-gray-50 rounded-full shadow border border-gray-100 text-gray-400 hover:text-[#E3001B] transition-colors md:opacity-0 group-hover:opacity-100 focus:opacity-100 opacity-100"
+          className="absolute top-4 right-4 z-20 p-2 bg-white hover:bg-gray-50 rounded-full shadow-md border border-gray-100 text-gray-400 hover:text-[#1F2937] transition-colors md:opacity-0 group-hover:opacity-100 focus:opacity-100 opacity-100"
         >
-          <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#E3001B] text-[#E3001B]' : ''}`} />
+          <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#1F2937] text-[#1F2937]' : ''}`} />
         </button>
         {/* Producto */}
-        <div className={`relative w-[160px] h-[160px] max-w-full transition-transform duration-300 ${product.inStock ? 'group-hover:scale-105' : 'grayscale'}`}>
+        <div className={`relative w-full h-full min-h-[150px] md:min-h-[160px] transition-transform duration-300 ${product.inStock ? 'group-hover:scale-105' : 'grayscale'}`}>
           <Image src={product.image} alt={product.name} fill className="object-contain" referrerPolicy="no-referrer" />
         </div>
       </Link>
@@ -216,45 +220,22 @@ export function ProductCard({
       <div className="flex flex-col flex-grow px-1">
         <Link
           href={`/producto/${product.id}?segment=${product.segment}`}
-          className="text-[13px] text-gray-700 leading-snug mb-3 font-semibold hover:text-[#E3001B] transition-colors line-clamp-2"
+          className="text-caption text-gray-700 leading-snug mb-3 font-semibold hover:text-[#1F2937] transition-colors line-clamp-2"
         >
           {product.name}
         </Link>
 
         {/* Precio principal */}
-        <div className="mb-2">
+        <div className="mb-4">
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <span className={`text-xl font-black ${product.inStock ? 'text-[#E3001B]' : 'text-gray-400'}`}>
+            <span className={`text-title font-black ${product.inStock ? 'text-[#1F2937]' : 'text-gray-400'}`}>
               {sol(product.price)}
             </span>
             {product.originalPrice && (
-              <span className="text-xs text-gray-400 line-through">{sol(product.originalPrice)}</span>
+              <span className="text-micro text-gray-400 line-through">{sol(product.originalPrice)}</span>
             )}
           </div>
-          <p className="text-[11px] text-gray-400 mt-0.5">
-            {isPack
-              ? `el display · ${sol(pricePerUnit)} por unidad`
-              : 'precio mayorista por unidad'}
-          </p>
         </div>
-
-        {/* Tabla de precios por volumen */}
-        {product.inStock && (
-          <div className="bg-gray-50 rounded-lg p-3 mb-4">
-            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2">Precio por volumen</p>
-            <div className="space-y-1">
-              {volumePricing.map((tier, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <span className="text-[11px] text-gray-500">{tier.label}</span>
-                  <span className={`text-[11px] font-bold ${i === 0 ? 'text-gray-700' : 'text-green-600'}`}>
-                    {sol(tier.price)}
-                    {i > 0 && <span className="text-[9px] text-green-500 ml-1">(-{i === 1 ? '5' : '10'}%)</span>}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Botón de acción */}
         <div className="mt-auto flex flex-col gap-2" onClick={e => e.preventDefault()}>
@@ -268,7 +249,7 @@ export function ProductCard({
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="text-sm font-bold text-gray-700 w-8 text-center">{quantity}</span>
+                <span className="text-caption font-bold text-gray-700 w-8 text-center">{quantity}</span>
                 <button
                   onClick={(e) => { e.preventDefault(); setQuantity(quantity + 1); }}
                   className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
@@ -279,16 +260,20 @@ export function ProductCard({
               {/* Botón Añadir */}
               <button
                 onClick={(e) => { e.preventDefault(); handleAddToCart(e); }}
-                className="w-full flex items-center justify-center gap-2 bg-[#E3001B] hover:bg-[#c40017] text-white text-sm font-bold py-2.5 px-4 rounded-xl transition-all hover:scale-[1.02] shadow-md hover:shadow-[0_6px_20px_rgba(227,0,27,0.35)]"
+                className={`w-full flex items-center justify-center gap-2 text-caption font-bold py-3 px-4 rounded-xl transition-all duration-300 transform active:scale-95 shadow-sm hover:shadow-lg ${
+                  isAdded 
+                    ? 'bg-[#10B981] hover:bg-[#059669] text-white scale-[1.02]' 
+                    : 'bg-[#111111] hover:bg-[#EF4444] text-white hover:scale-[1.03]'
+                }`}
               >
-                <ShoppingCart className="w-4 h-4" />
-                Añadir al carrito
+                {isAdded ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+                {isAdded ? 'Añadido' : 'Añadir al carrito'}
               </button>
             </>
           ) : (
             <button
               disabled
-              className="w-full flex items-center justify-center py-2.5 text-sm font-bold rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
+              className="w-full flex items-center justify-center py-2.5 text-caption font-bold rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
             >
               Agotado
             </button>

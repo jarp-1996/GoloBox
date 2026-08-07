@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { createClient } from '@supabase/supabase-js';
+import { getProductById } from '@/lib/catalog';
 
 // Configura MP
 const client = new MercadoPagoConfig({
@@ -17,6 +18,41 @@ export async function POST(req: Request) {
     // Extraer datos del carrito que enviamos desde el frontend
     const { items, customerEmail, customerName, totalAmount, ...paymentData } = body;
 
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return NextResponse.json({ error: 'El carrito está vacío o es inválido' }, { status: 400 });
+    }
+
+    let secureSubtotal = 0;
+    const secureItems = [];
+
+    // Calcular el total real basado en la BD de forma segura
+    for (const item of items) {
+      if (!item.id) continue;
+      const product = await getProductById(item.id);
+      
+      if (!product) {
+        return NextResponse.json({ error: `Producto no encontrado: ${item.id}` }, { status: 404 });
+      }
+
+      const quantity = Number(item.quantity) || 1;
+      secureSubtotal += product.price * quantity;
+      
+      secureItems.push({
+        id: product.id,
+        name: product.name,
+        price: product.price, // Precio real seguro
+        quantity: quantity,
+        image: product.image,
+      });
+    }
+
+    // MercadoPago (tarjeta) tiene un 5% de recargo, lo aplicamos de forma segura
+    const surcharge = secureSubtotal * 0.05;
+    const secureTotal = Number((secureSubtotal + surcharge).toFixed(2));
+
+    // Forzar el transaction_amount seguro
+    paymentData.transaction_amount = secureTotal;
+
     // Inicializar Supabase con la service key (lado del servidor)
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -24,7 +60,7 @@ export async function POST(req: Request) {
     let orderId: string | null = null;
 
     // Guardar el pedido en Supabase ANTES de procesar el pago (status: pending)
-    if (supabaseUrl && supabaseServiceKey && items) {
+    if (supabaseUrl && supabaseServiceKey) {
       const supabase = createClient(supabaseUrl, supabaseServiceKey);
       const { data: order, error } = await supabase
         .from('orders')
@@ -32,8 +68,8 @@ export async function POST(req: Request) {
           status: 'pending',
           customer_email: customerEmail || paymentData.payer?.email || 'N/A',
           customer_name: customerName || paymentData.payer?.first_name || 'N/A',
-          total_amount: totalAmount || paymentData.transaction_amount,
-          items: items || [],
+          total_amount: secureTotal,
+          items: secureItems,
           telegram_notified: false,
         })
         .select()

@@ -5,166 +5,148 @@ import Image from 'next/image';
 import { Product } from '@/lib/catalog';
 import { useCart } from '@/components/CartContext';
 import { useToast } from '@/components/ToastContext';
-import { Heart, Maximize2, Minus, Plus } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 export function ProductDetail({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
   const { addToCart } = useCart();
   const { showToast } = useToast();
 
   const handleAddToCart = () => {
-    // Add multiple items by looping (or modify the context to support quantity)
-    // For simplicity with existing context:
     for (let i = 0; i < quantity; i++) {
       addToCart(product);
     }
     showToast(`¡${quantity}x ${product.name} agregado al carrito!`);
     setQuantity(1);
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 800);
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-        {/* Product Image */}
-        <div className="w-full md:w-1/2">
-          <div className="relative aspect-square bg-white border border-gray-100 rounded-2xl flex items-center justify-center p-8 group">
-          <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-            {!product.inStock ? (
-              <div className="bg-gray-800 text-white text-[12px] font-bold px-3 py-1.5 rounded shadow-sm self-start uppercase">
-                Agotado
-              </div>
-            ) : (
-              <>
-                {product.originalPrice && (
-                  <div className="w-14 h-14 bg-[#E3001B] text-white flex items-center justify-center rounded-[40%_60%_70%_30%_/_40%_50%_60%_50%] shadow-sm">
-                    <span className="text-[13px] font-bold transform -rotate-12">Oferta</span>
-                  </div>
-                )}
-                <div className="bg-[#0B2545] text-white text-[12px] font-bold px-3 py-1.5 rounded shadow-sm self-start">
-                  Nuevo
-                </div>
-              </>
-            )}
-          </div>
-          <button className="absolute bottom-4 left-4 w-10 h-10 bg-white shadow-md border border-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:text-black z-10">
-            <Maximize2 className="w-5 h-5" />
-          </button>
-          
-          <div className={`relative w-full h-full max-w-[400px] max-h-[400px] ${!product.inStock ? 'grayscale opacity-75' : ''}`}>
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              className="object-contain"
-              referrerPolicy="no-referrer"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Product Info */}
-      <div className="w-full md:w-1/2 flex flex-col pt-4">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-6">
+    <div className="flex flex-col font-sans pt-32 pb-24 selection:bg-red-500 selection:text-white">
+      
+      <div className="w-full text-center mb-16">
+        <h1 className="text-[12vw] md:text-[8vw] lg:text-[6vw] font-black leading-[0.85] tracking-tighter uppercase break-words px-4">
           {product.name}
         </h1>
+      </div>
 
-        <div className="flex items-end gap-3 mb-6">
-          {product.originalPrice && (
-            <p className="text-xl text-gray-400 line-through">
-              S/ {product.originalPrice.toFixed(2)}
-            </p>
-          )}
-          <p className="text-3xl font-bold text-[#E3001B]">
-            S/ {product.price.toFixed(2)}
-          </p>
+      <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 w-full">
+        {/* Left: Product Image */}
+        <div className="w-full lg:w-3/5">
+          <div className="relative aspect-square bg-[#F3F4F6] rounded-[3rem] flex items-center justify-center p-8 overflow-hidden group">
+            
+            {/* Status badges Brutalist style */}
+            <div className="absolute top-12 left-12 flex flex-col items-start gap-4 z-10">
+              {!product.inStock ? (
+                <div className="bg-black text-white text-micro font-black px-6 py-3 rounded-full uppercase tracking-widest border-2 border-transparent text-center w-fit">
+                  AGOTADO
+                </div>
+              ) : (
+                <>
+                  {product.originalPrice && (
+                    <div className="bg-[#EF4444] text-white text-micro font-black px-6 py-3 rounded-full uppercase tracking-widest text-center w-fit">
+                      OFERTA
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className={`relative w-full h-full max-w-[600px] max-h-[600px] transition-transform duration-1000 group-hover:scale-105 ${!product.inStock ? 'grayscale opacity-50' : ''}`}>
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                className="object-contain"
+                sizes="(max-width: 1024px) 100vw, 60vw"
+                priority
+              />
+            </div>
+          </div>
         </div>
 
-        <ul className="space-y-2 mb-8 text-[14px] text-gray-600">
-          <li className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
-            <span className="font-medium text-gray-900">Fecha de vencimiento:</span> 
-            <span className="text-[#E3001B] font-medium">03/2027</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
-            <span className="font-medium text-gray-900">Marca:</span> 
-            {product.brand}
-          </li>
-          {product.packSize && (
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full" />
-              <span className="font-medium text-gray-900">Presentación:</span> 
-              {product.packSize}
-            </li>
-          )}
-        </ul>
-
-        <div className="flex items-center gap-4 mb-6">
-          <div className={`flex items-center h-12 bg-white border border-gray-200 rounded-lg ${!product.inStock ? 'opacity-50' : ''}`}>
-            <button 
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              disabled={!product.inStock}
-              className="w-12 h-full flex items-center justify-center text-gray-500 hover:text-black transition-colors disabled:cursor-not-allowed"
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-            <input 
-              type="number"
-              value={quantity}
-              readOnly
-              className="w-12 text-center font-bold text-gray-900 outline-none bg-transparent"
-            />
-            <button 
-              onClick={() => setQuantity(quantity + 1)}
-              disabled={!product.inStock}
-              className="w-12 h-full flex items-center justify-center text-gray-500 hover:text-black transition-colors disabled:cursor-not-allowed"
-            >
-              <Plus className="w-4 h-4" />
-            </button>
-          </div>
+        {/* Right: Product Info & Brutalist Action */}
+        <div className="w-full lg:w-2/5 flex flex-col justify-center">
           
-          <button 
-            onClick={handleAddToCart}
-            disabled={!product.inStock}
-            className={`flex-1 h-12 font-bold rounded-lg transition-colors flex items-center justify-center shadow-sm ${
-              product.inStock 
-                ? 'bg-[#E3001B] hover:bg-[#cc0018] text-white' 
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            {product.inStock ? 'AÑADIR AL CARRITO' : 'AGOTADO'}
-          </button>
-        </div>
-
-        <button className="flex items-center gap-2 text-gray-600 hover:text-[#E3001B] transition-colors font-medium text-sm w-fit mb-8">
-          <Heart className="w-5 h-5" />
-          Añadir a favoritos
-        </button>
-
-        <div className="flex items-center gap-4 text-[13px] text-gray-600 pt-6 border-t border-gray-100">
-          <span className="font-medium text-gray-900">Compartir:</span>
-          {/* Mock Social Icons */}
-          <div className="flex items-center gap-3">
-            <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 text-gray-700 transition-colors font-bold text-xs">f</button>
-            <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 text-gray-700 transition-colors font-bold text-xs">X</button>
-            <button className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-[#25D366] hover:text-white text-gray-700 transition-colors font-bold text-xs">w</button>
+          <div className="flex items-end gap-6 mb-12 border-b-4 border-black pb-8">
+            <p className="text-7xl lg:text-8xl font-black text-black tracking-tighter">
+              S/{product.price.toFixed(0)}
+            </p>
+            {product.originalPrice && (
+              <p className="text-title text-gray-400 line-through font-black pb-2">
+                S/{product.originalPrice.toFixed(0)}
+              </p>
+            )}
           </div>
+
+          <p className="text-body text-gray-600 leading-relaxed mb-12 font-medium">
+            {product.description}
+          </p>
+
+          {/* Qué Incluye Section */}
+          {product.contents && product.contents.length > 0 && (
+            <div className="mb-16">
+              <h3 className="text-title font-black text-black mb-6 uppercase tracking-tight">
+                INCLUYE:
+              </h3>
+              <ul className="space-y-4">
+                {product.contents.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-4 text-gray-800 text-body font-bold uppercase tracking-wide">
+                    <span className="text-[#EF4444] shrink-0 mt-1">✦</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Add to Cart Actions */}
+          <div className="flex flex-col gap-6">
+            <div className={`flex items-center h-20 bg-[#F3F4F6] rounded-full px-4 border-2 border-transparent ${!product.inStock ? 'opacity-50' : ''}`}>
+              <button 
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                disabled={!product.inStock}
+                data-cursor="button"
+                className="w-16 h-16 flex items-center justify-center text-black font-black text-title hover:bg-white rounded-full transition-all disabled:cursor-not-allowed"
+              >
+                -
+              </button>
+              <input 
+                type="number"
+                value={quantity}
+                readOnly
+                className="flex-1 text-center font-black text-title text-black outline-none bg-transparent"
+              />
+              <button 
+                onClick={() => setQuantity(quantity + 1)}
+                disabled={!product.inStock}
+                data-cursor="button"
+                className="w-16 h-16 flex items-center justify-center text-black font-black text-title hover:bg-white rounded-full transition-all disabled:cursor-not-allowed"
+              >
+                +
+              </button>
+            </div>
+            
+            <button 
+              onClick={handleAddToCart}
+              disabled={!product.inStock}
+              data-cursor="link"
+              className={`w-full h-24 font-black text-title rounded-[2rem] transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-4 uppercase tracking-widest shadow-lg hover:shadow-2xl ${
+                !product.inStock 
+                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  : isAdded
+                  ? 'bg-[#10B981] hover:bg-[#059669] text-white scale-[1.02]'
+                  : 'bg-black hover:bg-[#EF4444] text-white hover:scale-[1.02]'
+              }`}
+            >
+              {isAdded && <Check className="w-8 h-8" />}
+              {product.inStock ? (isAdded ? '¡AÑADIDO!' : 'AGREGAR AL CARRITO') : 'AGOTADO'}
+            </button>
+          </div>
+
         </div>
-
-      </div>
-      </div>
-
-      {/* Full Width Description Area */}
-      <div className="w-full mt-8 pt-8 border-t border-gray-100">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">Descripción</h3>
-        <p className="text-gray-600 leading-relaxed text-[15px]">
-          Disfruta de todo el sabor y la calidad de <span className="font-bold text-gray-900">{product.name}</span>, un clásico de <span className="font-bold text-gray-900">{product.brand}</span>. 
-          Perfecto para compartir en familia, regalar en ocasiones especiales o disfrutar en cualquier momento del día. 
-          Nuestra tienda garantiza que todos los productos son 100% originales, con fechas de vencimiento largas para asegurar su frescura. 
-          ¡No te quedes sin el tuyo y aprovecha nuestros precios de distribuidor!
-        </p>
       </div>
     </div>
   );

@@ -40,13 +40,13 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B2545] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#991B1B] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 bg-white/10 rounded-2xl px-6 py-3">
             <span className="text-white font-black text-2xl tracking-tight">GOLOZIN</span>
-            <span className="text-[#E3001B] font-black text-xs bg-white/10 px-2 py-1 rounded-lg">ADMIN</span>
+            <span className="text-[#1F2937] font-black text-xs bg-white/10 px-2 py-1 rounded-lg">ADMIN</span>
           </div>
           <p className="text-blue-200 text-sm mt-3">Panel de administración</p>
         </div>
@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-[#0B2545] transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-[#991B1B] transition-colors"
                 placeholder="admin@golozin.pe"
               />
             </div>
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-[#0B2545] transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-[#991B1B] transition-colors"
                 placeholder="••••••••"
               />
             </div>
@@ -97,7 +97,7 @@ export default function AdminLoginPage() {
               id="admin-login-btn"
               type="submit"
               disabled={loading}
-              className="w-full bg-[#0B2545] hover:bg-[#0a1f3d] text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#991B1B] hover:bg-[#0a1f3d] text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Entrando...' : 'Entrar al panel'}
             </button>

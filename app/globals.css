@@ -1,12 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-golozin-blue: #0B2545;
-  --color-golozin-red: #E3001B;
-  --color-golozin-gray: #F8F9FA;
-  --color-golozin-cream: #FFFFFF;
-  --color-golozin-dark: #1F2937;
-  --color-golozin-whatsapp: #25D366;
+  --color-golozin-primary: #5F4B8B;
+  --color-golozin-secondary: #E69A8D;
+  --color-golozin-accent: #111827;
+  --color-golozin-light: #F9FAFB;
+  --color-golozin-dark: #000000;
+  --color-golozin-muted: #374151;
+  --font-sans: var(--font-poppins);
+  --font-inter: var(--font-inter);
+  --font-size-hero: clamp(2.5rem, 8vw, 7.5rem);
+  --font-size-display: clamp(1.8rem, 5vw, 4rem);
+  --font-size-title: clamp(1.25rem, 3vw, 2.2rem);
+  --font-size-body: 1.125rem;
+  --font-size-caption: 0.875rem;
+  --font-size-micro: 0.625rem;
 }
 
 html {
@@ -14,7 +22,7 @@ html {
 }
 
 body {
-  background-color: var(--color-golozin-cream);
+  background-color: var(--color-golozin-secondary);
   color: var(--color-golozin-dark);
 }
 
@@ -28,12 +36,83 @@ body {
 .animate-float-delayed { animation: float 7s ease-in-out infinite 1.5s; }
 .animate-float-fast { animation: float 5s ease-in-out infinite 0.5s; }
 
-@keyframes marquee-lr {
+/* Marquee Animations */
+@keyframes marquee-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
   0% { transform: translateX(-50%); }
   100% { transform: translateX(0%); }
 }
 
-.animate-marquee-lr {
-  animation: marquee-lr 35s linear infinite;
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 30s linear infinite;
+}
+
+/* Custom Cursor (Beech Style) */
+body {
+  cursor: none; /* Hide default cursor on desktop */
+}
+
+/* We still want default cursor on interactive elements if the custom cursor is not running, but for the full effect we hide it globally on desktop and rely on the follower. However, it's safer to only hide it on devices that support hover. */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
+.cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #EF4444; /* Red-500 */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+              height 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+              background-color 0.3s ease;
+  mix-blend-mode: difference;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.cursor-follower.hovering-link {
+  width: 80px;
+  height: 80px;
+  background-color: #FFFFFF;
+  mix-blend-mode: normal;
+  color: #000000;
+}
+
+.cursor-follower.hovering-product {
+  width: 100px;
+  height: 100px;
+  background-color: #EF4444;
+  mix-blend-mode: normal;
+  color: #FFFFFF;
+}
+
+.cursor-follower.hovering-button {
+  width: 60px;
+  height: 60px;
+  background-color: transparent;
+  border: 2px solid white;
 }
 

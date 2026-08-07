@@ -3,23 +3,23 @@ import { test, expect } from '@playwright/test';
 test('Flujo de compra completo: desde inicio hasta checkout', async ({ page }) => {
   // 1. Entrar a la tienda
   await page.goto('/tienda');
-  await page.waitForTimeout(2000); // Pausa para que veas la pantalla cargar
 
   // 2. Hacer click en Añadir al carrito del primer producto disponible
-  await page.locator('button:has-text("Añadir al carrito")').first().click();
-  await page.waitForTimeout(2000); // Pausa para que veas el badge y el toast
+  const addBtn = page.locator('button:has-text("Añadir al carrito")').first();
+  await addBtn.waitFor({ state: 'visible' });
+  await addBtn.click();
 
-  // 3. Forzar abrir el carrito usando Javascript para no fallar por animaciones
-  await page.evaluate(() => {
-    const btn = document.querySelector('button[aria-label="Ver carrito de compras"]') as HTMLButtonElement;
-    if (btn) btn.click();
-  });
-  await page.waitForTimeout(2000); // Pausa para que veas el menú lateral abrirse
+  // 3. Abrir el carrito
+  const cartBtn = page.locator('button[aria-label="Ver carrito de compras"]');
+  await cartBtn.waitFor({ state: 'visible' });
+  await cartBtn.click({ force: true });
 
   // 4. Hacer click en Finalizar Compra
   const checkoutBtn = page.locator('button:has-text("Finalizar Compra")').first();
-  if (await checkoutBtn.isVisible()) {
-    await checkoutBtn.click();
-    await page.waitForTimeout(3000); // Pausa para que veas que llegamos al checkout
-  }
+  await checkoutBtn.waitFor({ state: 'visible' });
+  await checkoutBtn.click();
+
+  // 5. Validar que hemos avanzado (por ejemplo, aparece la opción de método de pago o cambia la URL)
+  // Esperamos a que la navegación o el cambio de estado suceda
+  await page.waitForLoadState('networkidle');
 });

@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { ShoppingBag, Package, TrendingUp, AlertCircle, LogOut, Plus } from 'lucide-react';
 
 async function getStats() {
@@ -43,15 +45,33 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 };
 
 export default async function AdminDashboard() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('admin_session')?.value;
+
+  if (!token) {
+    redirect('/admin/login');
+  }
+
+  const supabaseAuth = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const { data: { user }, error } = await supabaseAuth.auth.getUser(token);
+
+  if (error || !user) {
+    redirect('/admin/login');
+  }
+
   const { recentOrders, todayRevenue, totalRevenue, pendingOrders, outOfStock, products, orders } = await getStats();
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-[#0B2545] text-white px-6 py-4 flex items-center justify-between shadow-lg">
+      <header className="bg-[#991B1B] text-white px-6 py-4 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
           <span className="font-black text-xl tracking-tight">GOLOZIN</span>
-          <span className="text-[#E3001B] font-black text-xs bg-white/10 px-2 py-1 rounded-lg">ADMIN</span>
+          <span className="text-[#1F2937] font-black text-xs bg-white/10 px-2 py-1 rounded-lg">ADMIN</span>
         </div>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link href="/admin" className="text-white border-b-2 border-white pb-1">Dashboard</Link>
@@ -123,7 +143,7 @@ export default async function AdminDashboard() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Link href="/admin/pedidos" className="bg-[#0B2545] text-white rounded-2xl p-6 hover:bg-[#0a1f3d] transition-colors flex items-center gap-4 group">
+          <Link href="/admin/pedidos" className="bg-[#991B1B] text-white rounded-2xl p-6 hover:bg-[#0a1f3d] transition-colors flex items-center gap-4 group">
             <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-colors">
               <ShoppingBag className="w-6 h-6" />
             </div>
@@ -133,9 +153,9 @@ export default async function AdminDashboard() {
             </div>
           </Link>
 
-          <Link href="/admin/productos" className="bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-[#0B2545] transition-colors flex items-center gap-4 group">
-            <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-[#0B2545]/10 transition-colors">
-              <Package className="w-6 h-6 text-gray-600 group-hover:text-[#0B2545]" />
+          <Link href="/admin/productos" className="bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-[#991B1B] transition-colors flex items-center gap-4 group">
+            <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-[#991B1B]/10 transition-colors">
+              <Package className="w-6 h-6 text-gray-600 group-hover:text-[#991B1B]" />
             </div>
             <div>
               <p className="font-black text-lg text-gray-900">Gestionar catálogo</p>
@@ -148,7 +168,7 @@ export default async function AdminDashboard() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="flex items-center justify-between p-6 border-b border-gray-100">
             <h2 className="text-xl font-black text-gray-900">Pedidos recientes</h2>
-            <Link href="/admin/pedidos" className="text-sm text-[#E3001B] font-bold hover:underline">
+            <Link href="/admin/pedidos" className="text-sm text-[#1F2937] font-bold hover:underline">
               Ver todos →
             </Link>
           </div>

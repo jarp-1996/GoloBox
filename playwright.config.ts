@@ -1,7 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = process.env.PORT || 3000;
-const baseURL = `http://localhost:${PORT}`;
+const baseURL = process.env.BASE_URL || 'http://localhost:3000';
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -24,14 +23,9 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    // Descomentar para probar en otros navegadores
-    // { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    // { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-  ],
-  webServer: {
-    command: 'npm run dev',
-    url: baseURL,
-    timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    }
+  ]
 });

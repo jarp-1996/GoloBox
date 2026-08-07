@@ -2,9 +2,10 @@ import type {Metadata} from 'next';
 import './globals.css'; // Global styles
 import { CartProvider } from '@/components/CartContext';
 import { ToastProvider } from '@/components/ToastContext';
-import { Inter } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-poppins' });
 
 const SITE_URL = 'https://golozin-ecommerce.vercel.app';
 
@@ -76,10 +77,13 @@ export const metadata: Metadata = {
   category: 'ecommerce',
 };
 
+import { CursorFollower } from '@/components/CursorFollower';
+
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="es" className={`${inter.variable}`}>
+    <html lang="es" className={`${inter.variable} ${poppins.variable}`}>
       <body suppressHydrationWarning className="bg-[#FDFCFB] text-gray-900 font-sans antialiased">
+        <CursorFollower />
         <ToastProvider>
           <CartProvider>
             {children}

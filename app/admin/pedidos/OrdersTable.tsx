@@ -64,7 +64,7 @@ export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
             onClick={() => setFilterStatus(s)}
             className={`px-4 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-colors ${
               filterStatus === s
-                ? 'bg-[#0B2545] text-white'
+                ? 'bg-[#991B1B] text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -125,7 +125,7 @@ export function OrdersTable({ initialOrders }: { initialOrders: Order[] }) {
                             updateStatus(order.id, nextStatus);
                           }}
                           disabled={updating === order.id}
-                          className="text-xs font-bold text-[#0B2545] bg-[#0B2545]/10 hover:bg-[#0B2545]/20 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                          className="text-xs font-bold text-[#991B1B] bg-[#991B1B]/10 hover:bg-[#991B1B]/20 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
                         >
                           {updating === order.id ? '...' : `→ ${STATUS_LABELS[nextStatus]?.label}`}
                         </button>

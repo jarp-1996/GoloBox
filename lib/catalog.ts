@@ -14,6 +14,9 @@ export interface Product {
   segment: Segment;
   inStock: boolean;
   packSize?: string;
+  description?: string;
+  idealFor?: string[];
+  contents?: string[];
 }
 
 // Función helper para mapear de BD a frontend
@@ -150,16 +153,84 @@ export const catalog: Product[] = [
 // Array original comentado para evitar errores de despliegue si se necesita de fallback rápido
 // export const catalog: Product[] = [...]
 
+const B2C_BOXES: Product[] = [
+  {
+    id: 'antojos-peruanos',
+    name: 'Antojos Peruanos',
+    brand: "GOLOZIN BOX",
+    price: 65.00,
+    image: "/images/antojos_peruanos_box.png",
+    category: "Cajas",
+    segment: "fiestas",
+    inStock: true,
+    description: 'Tus clásicos favoritos del Perú en una sola caja. Perfecta para matar el antojo o sorprender a quien está lejos.',
+    idealFor: ['Regalo Especial', 'Para compartir'],
+    contents: ['Doña Pepa', 'Sublime', 'Cua Cua', 'Inca Kola']
+  },
+  {
+    id: 'sabor-americano',
+    name: 'Sabor Americano',
+    brand: "GOLOZIN BOX",
+    price: 85.00,
+    image: "/images/sabor_americano_box.png",
+    category: "Cajas",
+    segment: "fiestas",
+    inStock: true,
+    description: 'Una selección de los chocolates y caramelos más virales de USA.',
+    idealFor: ['Amantes del dulce', 'Regalo premium'],
+    contents: ['Snickers', 'Skittles', 'M&Ms', 'Reese\'s']
+  },
+  {
+    id: 'chocolates-peruanos',
+    name: 'Chocolates Peruanos',
+    brand: "GOLOZIN BOX",
+    price: 55.00,
+    image: "/images/chocolates_peruanos_box.png",
+    category: "Cajas",
+    segment: "fiestas",
+    inStock: true,
+    description: 'La tradición chocolatera del Perú en un empaque de lujo. Ideal para los más exigentes.',
+    idealFor: ['Regalo romántico', 'Para mamá/papá'],
+    contents: ['Vizzio', 'Chocolates La Ibérica', 'Bombones Monfer']
+  },
+  {
+    id: 'pack-sorpresitas',
+    name: 'Pack Sorpresitas',
+    brand: "GOLOZIN BOX",
+    price: 45.00,
+    image: "/images/peruvian_box.png",
+    category: "Cajas",
+    segment: "fiestas",
+    inStock: true,
+    description: 'Resuelve las cajitas sorpresa de tus fiestas infantiles al instante con este surtido.',
+    idealFor: ['Fiestas infantiles', 'Piñatas'],
+    contents: ['Chupetines', 'Caramelos', 'Galletitas', 'Gomitas']
+  },
+  {
+    id: 'mesa-cumpleanera',
+    name: 'Mesa Cumpleañera',
+    brand: "GOLOZIN BOX",
+    price: 150.00,
+    image: "/images/mesa_cumpleanera_box.png",
+    category: "Cajas",
+    segment: "fiestas",
+    inStock: true,
+    description: 'Todo lo que necesitas para armar la mesa de dulces más espectacular.',
+    idealFor: ['Cumpleaños', 'Eventos'],
+    contents: ['Golosinas premium', 'Chocolates surtidos', 'Bebidas', 'Snacks salados']
+  }
+];
+
 export async function getCategories(): Promise<Category[]> {
-  const { data } = await supabase.from('products').select('category');
-  if (!data) return [];
-  return Array.from(new Set(data.map(p => p.category)));
+  // En modo B2C estricto, solo mostramos las categorías de nuestras cajas premium
+  const boxCategories = B2C_BOXES.map(box => box.category);
+  return Array.from(new Set([...boxCategories]));
 }
 
 export async function getBrands(): Promise<string[]> {
-  const { data } = await supabase.from('products').select('brand');
-  if (!data) return [];
-  return Array.from(new Set(data.map(p => p.brand)));
+  // En modo B2C estricto, solo mostramos las marcas de nuestras cajas
+  const boxBrands = B2C_BOXES.map(box => box.brand);
+  return Array.from(new Set([...boxBrands]));
 }
 
 export async function getProducts(segment?: Segment): Promise<Product[]> {
@@ -168,7 +239,109 @@ export async function getProducts(segment?: Segment): Promise<Product[]> {
     query = query.eq('segment', segment);
   }
   const { data } = await query;
+  const dbProducts = (data || []).map(mapProduct);
+  
+  // Inyectar nuestras cajas B2C al principio
+  if (!segment || segment === 'fiestas') {
+    return [...B2C_BOXES, ...dbProducts];
+  }
+  return dbProducts;
+}
+
+export async function getRelatedProducts(category: string, excludeId: string, limit: number = 4): Promise<Product[]> {
+  const { data } = await supabase.from('products').select('*').eq('category', category).neq('id', excludeId).limit(limit);
+  let dbProducts = (data || []).map(mapProduct);
+  
+  // Incluir cajas de la misma categoría si aplican, hasta el límite
+  const relatedBoxes = B2C_BOXES.filter(b => b.category === category && b.id !== excludeId);
+  return [...relatedBoxes, ...dbProducts].slice(0, limit);
+}
+
+export async function getRecentProducts(limit: number = 4): Promise<Product[]> {
+  const { data } = await supabase.from('products').select('*').order('id', { ascending: false }).limit(limit);
   return (data || []).map(mapProduct);
+}
+
+export interface PaginatedProducts {
+  products: Product[];
+  total: number;
+}
+
+export async function getProductsPaginated(params: {
+  page: number;
+  limit: number;
+  segment?: Segment;
+  category?: string;
+  brand?: string;
+  q?: string;
+  sortBy?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}): Promise<PaginatedProducts> {
+  let query = supabase.from('products').select('*', { count: 'exact' });
+
+  if (params.segment) {
+    query = query.eq('segment', params.segment);
+  }
+  if (params.category) {
+    query = query.eq('category', params.category);
+  }
+  if (params.brand) {
+    query = query.eq('brand', params.brand);
+  }
+  if (params.q) {
+    const q = `%${params.q}%`;
+    query = query.or(`name.ilike.${q},brand.ilike.${q},category.ilike.${q}`);
+  }
+  if (params.minPrice !== undefined) {
+    query = query.gte('price', params.minPrice);
+  }
+  if (params.maxPrice !== undefined) {
+    query = query.lte('price', params.maxPrice);
+  }
+
+  if (params.sortBy === 'precio_menor') {
+    query = query.order('price', { ascending: true });
+  } else if (params.sortBy === 'precio_mayor') {
+    query = query.order('price', { ascending: false });
+  } else {
+    // default sort by id desc
+    query = query.order('id', { ascending: false });
+  }
+
+  const from = (params.page - 1) * params.limit;
+  const to = from + params.limit - 1;
+
+  query = query.range(from, to);
+
+  const { data, count, error } = await query;
+  
+  if (error) {
+    console.error("Error fetching products", error);
+    return { products: [], total: 0 };
+  }
+  
+  // MODO B2C ESTRICTO: Ocultamos los productos individuales de la vitrina principal.
+  // Solo mostraremos las Cajas (B2C_BOXES)
+  
+  let finalProducts = [...B2C_BOXES];
+
+  // Si hay una búsqueda, filtramos en las cajas
+  if (params.q) {
+    const query = params.q.toLowerCase();
+    finalProducts = finalProducts.filter(p => p.name.toLowerCase().includes(query) || p.description?.toLowerCase().includes(query));
+  }
+
+  // mock original price for some
+  finalProducts = finalProducts.map((p, i) => ({
+    ...p,
+    originalPrice: i % 3 === 0 ? p.price * 1.5 : undefined
+  }));
+
+  return {
+    products: finalProducts,
+    total: finalProducts.length
+  };
 }
 
 export async function searchProducts(query: string, segment?: Segment): Promise<Product[]> {
@@ -182,11 +355,19 @@ export async function searchProducts(query: string, segment?: Segment): Promise<
     dbQuery = dbQuery.eq('segment', segment);
   }
   
+  dbQuery = dbQuery.limit(10);
+  
   const { data } = await dbQuery;
-  return (data || []).map(mapProduct);
+  const dbProducts = (data || []).map(mapProduct);
+  
+  const boxResults = B2C_BOXES.filter(box => box.name.toLowerCase().includes(query.toLowerCase()));
+  return [...boxResults, ...dbProducts];
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
+  const box = B2C_BOXES.find(b => b.id === id);
+  if (box) return box;
+
   const { data } = await supabase.from('products').select('*').eq('id', id).single();
   return data ? mapProduct(data) : undefined;
 }
