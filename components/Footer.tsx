@@ -16,7 +16,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-title font-black uppercase tracking-tight mb-6">GOLOZIN</h3>
+            <h3 className="text-title font-black uppercase tracking-tight mb-6">GOLO-BOX</h3>
             <p className="text-gray-400 max-w-sm text-caption font-light leading-relaxed">
               Elevando el estándar de los regalos corporativos y las sorpresas personales en todo el Perú.
             </p>
@@ -43,7 +43,7 @@ export function Footer() {
       {/* Bottom Section: Massive Brand Name & Copyright */}
       <div className="w-full px-6 md:px-12 mt-12 flex flex-col">
         <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 text-micro font-bold uppercase tracking-widest text-gray-600 mb-8 px-4">
-          <span>© {new Date().getFullYear()} GOLOZIN TODOS LOS DERECHOS RESERVADOS</span>
+          <span>© {new Date().getFullYear()} GOLO-BOX TODOS LOS DERECHOS RESERVADOS</span>
           <div className="flex gap-8">
             <Link href="/terminos" className="hover:text-white transition-colors">Términos</Link>
             <Link href="/privacidad" className="hover:text-white transition-colors">Privacidad</Link>

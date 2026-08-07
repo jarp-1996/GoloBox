@@ -59,21 +59,21 @@ export default async function Home() {
         <div className="w-full bg-[#EF4444] text-white py-6 overflow-hidden flex whitespace-nowrap border-y border-white/20">
           <div className="animate-marquee-left flex items-center gap-10 font-black text-title uppercase tracking-widest">
             <span>REGALOS PREMIUM</span> <span>•</span>
-            <span>GOLOZIN</span> <span>•</span>
+            <span>GOLO-BOX</span> <span>•</span>
             <span>PACKS PARA FIESTAS</span> <span>•</span>
             <span>ANTOJOS PERUANOS</span> <span>•</span>
             <span>REGALOS PREMIUM</span> <span>•</span>
-            <span>GOLOZIN</span> <span>•</span>
+            <span>GOLO-BOX</span> <span>•</span>
             <span>PACKS PARA FIESTAS</span> <span>•</span>
             <span>ANTOJOS PERUANOS</span> <span>•</span>
           </div>
           <div className="animate-marquee-left flex items-center gap-10 font-black text-title uppercase tracking-widest" aria-hidden="true">
             <span>REGALOS PREMIUM</span> <span>•</span>
-            <span>GOLOZIN</span> <span>•</span>
+            <span>GOLO-BOX</span> <span>•</span>
             <span>PACKS PARA FIESTAS</span> <span>•</span>
             <span>ANTOJOS PERUANOS</span> <span>•</span>
             <span>REGALOS PREMIUM</span> <span>•</span>
-            <span>GOLOZIN</span> <span>•</span>
+            <span>GOLO-BOX</span> <span>•</span>
             <span>PACKS PARA FIESTAS</span> <span>•</span>
             <span>ANTOJOS PERUANOS</span> <span>•</span>
           </div>

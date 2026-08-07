@@ -27,7 +27,7 @@ export function Header() {
             {/* Left: Logo */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="flex items-center group">
-                <span className="text-[28px] md:text-[34px] font-black tracking-tighter leading-none uppercase">GOLOZIN</span>
+                <span className="text-[28px] md:text-[34px] font-black tracking-tighter leading-none uppercase">GOLO-BOX</span>
               </Link>
             </div>
 
