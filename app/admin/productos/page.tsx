@@ -79,6 +79,7 @@ export default async function AdminProductsPage() {
                     <th className="text-left text-xs font-bold text-gray-500 uppercase tracking-wide px-6 py-4">Categoría</th>
                     <th className="text-left text-xs font-bold text-gray-500 uppercase tracking-wide px-6 py-4">Precio</th>
                     <th className="text-left text-xs font-bold text-gray-500 uppercase tracking-wide px-6 py-4">Stock</th>
+                    <th className="text-right text-xs font-bold text-gray-500 uppercase tracking-wide px-6 py-4">Acciones</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -119,6 +120,14 @@ export default async function AdminProductsPage() {
                             Agotado
                           </span>
                         )}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Link 
+                          href={`/admin/productos/${product.id}`}
+                          className="text-sm font-bold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg transition-colors inline-block"
+                        >
+                          Editar
+                        </Link>
                       </td>
                     </tr>
                   ))}
