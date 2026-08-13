@@ -21,7 +21,14 @@ export default async function AdminProductsPage() {
   const { data: { user }, error: authError } = await supabaseAuth.auth.getUser(token);
 
   if (authError || !user) {
-    redirect('/admin/login');
+    return (
+      <div className="p-8 text-red-600 bg-red-50 min-h-screen">
+        <h1 className="font-bold text-xl mb-4">Error de Autenticación (Debug)</h1>
+        <p>Token existe: {token ? 'Sí' : 'No'}</p>
+        <p>Error de Supabase: {authError?.message || 'Usuario nulo'}</p>
+        <pre className="mt-4 text-xs">{JSON.stringify(authError, null, 2)}</pre>
+      </div>
+    );
   }
 
   const supabase = createClient(
