@@ -7,7 +7,7 @@ import { Inter, Poppins } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-poppins' });
 
-const SITE_URL = 'https://golozin-ecommerce.vercel.app';
+const SITE_URL = 'https://golo-box.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

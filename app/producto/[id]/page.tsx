@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
-const SITE_URL = 'https://golozin-ecommerce.vercel.app';
+const SITE_URL = 'https://golo-box.vercel.app';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
