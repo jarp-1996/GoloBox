@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { ShoppingBag, LogOut } from 'lucide-react';
 import { OrdersTable } from './OrdersTable';
 
@@ -22,6 +24,24 @@ async function getOrders() {
 }
 
 export default async function AdminPedidosPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('admin_session')?.value;
+
+  if (!token) {
+    redirect('/admin/login');
+  }
+
+  const supabaseAuth = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  const { data: { user }, error: authError } = await supabaseAuth.auth.getUser(token);
+
+  if (authError || !user) {
+    redirect('/admin/login');
+  }
+
   const orders = await getOrders();
 
   return (
