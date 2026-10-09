@@ -15,29 +15,36 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  isCartReady: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isCartReady, setIsCartReady] = useState(false);
 
   // Load from local storage
   useEffect(() => {
     const savedCart = localStorage.getItem('golozin_cart');
     if (savedCart) {
       try {
+        // Hydrate the client-only cart after localStorage becomes available.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setItems(JSON.parse(savedCart));
       } catch (e) {
         console.error('Failed to parse cart');
       }
     }
+    setIsCartReady(true);
   }, []);
 
   // Save to local storage
   useEffect(() => {
-    localStorage.setItem('golozin_cart', JSON.stringify(items));
-  }, [items]);
+    if (isCartReady) {
+      localStorage.setItem('golozin_cart', JSON.stringify(items));
+    }
+  }, [items, isCartReady]);
 
   const addToCart = (product: Product, quantity: number = 1) => {
     setItems(currentItems => {
@@ -77,7 +84,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const totalPrice = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice }}>
+    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, clearCart, totalItems, totalPrice, isCartReady }}>
       {children}
     </CartContext.Provider>
   );

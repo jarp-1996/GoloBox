@@ -7,6 +7,8 @@ coverage/
 !.env.example
 
 .vercel
+.vscode/
+scripts/vercel-envs.js
 
 # Archivos personales
 CV_Jeri_Rodriguez_FullStack.html

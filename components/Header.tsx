@@ -16,7 +16,12 @@ export function Header() {
 
   useEffect(() => {
     // Cerrar menú móvil al cambiar de ruta
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMobileMenuOpen(false);
+
+    if (pathname === '/' && new URLSearchParams(window.location.search).get('cart') === 'open') {
+      setIsCartOpen(true);
+    }
     
     if (pathname !== '/') {
       setIsScrolledPastHero(false);

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { getProducts } from '@/lib/catalog';
 import { Suspense } from 'react';
 
+export const revalidate = 60;
+
 export default async function BoxesDeRegaloPage() {
   const allProducts = await getProducts('fiestas');
   const boxes = allProducts.filter(p => ['antojos-peruanos', 'sabor-americano', 'chocolates-peruanos'].includes(p.id));

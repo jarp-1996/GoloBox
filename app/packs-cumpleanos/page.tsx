@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { getProducts } from '@/lib/catalog';
 import { Suspense } from 'react';
 
+export const revalidate = 60;
+
 export default async function PacksCumpleanosPage() {
   const allProducts = await getProducts('fiestas');
   const packs = allProducts.filter(p => ['pack-sorpresitas', 'mesa-cumpleanera'].includes(p.id));

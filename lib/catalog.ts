@@ -38,6 +38,57 @@ function mapProduct(p: any): Product {
 
 // Catálogo migrado completamente a Supabase — ya no se necesitan datos estáticos
 
+// Supabase es la fuente preferida. Este catálogo de respaldo garantiza que
+// las cinco experiencias principales siempre tengan una ficha navegable.
+const FEATURED_BOXES: Product[] = [
+  {
+    id: 'antojos-peruanos', name: 'Antojos Peruanos', brand: 'GOLOZIN BOX', price: 65,
+    image: '/images/antojos_peruanos_box.png', category: 'Cajas', segment: 'fiestas', inStock: true,
+    description: 'Tus clásicos favoritos del Perú en una sola caja. Perfecta para matar el antojo o sorprender a quien está lejos con un pedacito de casa.',
+    idealFor: ['Regalo especial', 'Para compartir'],
+    contents: ['Doña Pepa', 'Sublime', 'Cua Cua', 'Inca Kola'],
+  },
+  {
+    id: 'sabor-americano', name: 'Sabor Americano', brand: 'GOLOZIN BOX', price: 85,
+    image: '/images/sabor_americano_box.png', category: 'Cajas', segment: 'fiestas', inStock: true,
+    description: 'Los chocolates y caramelos americanos más virales. Sabores que no encuentras en cualquier bodega.',
+    idealFor: ['Amantes del dulce', 'Regalo premium'],
+    contents: ['Snickers', 'Skittles', 'M&Ms', "Reese's"],
+  },
+  {
+    id: 'chocolates-peruanos', name: 'Chocolates Peruanos', brand: 'GOLOZIN BOX', price: 55,
+    image: '/images/chocolates_peruanos_box.png', category: 'Cajas', segment: 'fiestas', inStock: true,
+    description: 'La tradición chocolatera del Perú en un empaque de lujo. Ideal para los paladares más exigentes.',
+    idealFor: ['Regalo romántico', 'Para mamá o papá'],
+    contents: ['Vizzio', 'Chocolates La Ibérica', 'Bombones Monfer'],
+  },
+  {
+    id: 'pack-sorpresitas', name: 'Pack Sorpresitas', brand: 'GOLOZIN BOX', price: 45,
+    image: '/images/peruvian_box.png', category: 'Cajas', segment: 'fiestas', inStock: true,
+    description: 'Resuelve las cajitas sorpresa de tus fiestas infantiles al instante con este surtido.',
+    idealFor: ['Fiestas infantiles', 'Piñatas'],
+    contents: ['Chupetines', 'Caramelos', 'Galletitas', 'Gomitas'],
+  },
+  {
+    id: 'mesa-cumpleanera', name: 'Mesa Cumpleañera', brand: 'GOLOZIN BOX', price: 150,
+    image: '/images/mesa_cumpleanera_box.png', category: 'Cajas', segment: 'fiestas', inStock: true,
+    description: 'Todo lo que necesitas para armar la mesa de dulces más espectacular.',
+    idealFor: ['Cumpleaños', 'Eventos'],
+    contents: ['Golosinas premium', 'Chocolates surtidos', 'Bebidas', 'Snacks salados'],
+  },
+];
+
+function mergeFeaturedProducts(products: Product[]): Product[] {
+  const productsById = new Map(FEATURED_BOXES.map(product => [product.id, product]));
+
+  // Los registros actuales de Supabase reemplazan al respaldo.
+  for (const product of products) {
+    productsById.set(product.id, product);
+  }
+
+  return Array.from(productsById.values());
+}
+
 export async function getCategories(): Promise<Category[]> {
   const { data } = await supabase.from('products').select('category');
   const categories = (data || []).map(p => p.category);
@@ -56,7 +107,13 @@ export async function getProducts(segment?: Segment): Promise<Product[]> {
     query = query.eq('segment', segment);
   }
   const { data } = await query;
-  return (data || []).map(mapProduct);
+  const products = (data || []).map(mapProduct);
+
+  if (!segment || segment === 'fiestas') {
+    return mergeFeaturedProducts(products);
+  }
+
+  return products;
 }
 
 export async function getRelatedProducts(category: string, excludeId: string, limit: number = 4): Promise<Product[]> {
@@ -161,5 +218,9 @@ export async function searchProducts(query: string, segment?: Segment): Promise<
 
 export async function getProductById(id: string): Promise<Product | undefined> {
   const { data } = await supabase.from('products').select('*').eq('id', id).single();
-  return data ? mapProduct(data) : undefined;
+  if (data) {
+    return mapProduct(data);
+  }
+
+  return FEATURED_BOXES.find(product => product.id === id);
 }

@@ -11,6 +11,8 @@ import type { Metadata } from 'next';
 
 const SITE_URL = 'https://golo-box.vercel.app';
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const product = await getProductById(resolvedParams.id);

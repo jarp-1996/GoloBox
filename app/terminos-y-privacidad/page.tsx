@@ -44,6 +44,12 @@ export default function TermsAndPrivacyPage() {
               <p>
                 Los tiempos de entrega son estimados. Haremos nuestro mejor esfuerzo para entregar tu box en la fecha solicitada; sin embargo, no nos hacemos responsables por retrasos ocasionados por factores de fuerza mayor o eventos fuera de nuestro control.
               </p>
+              <ul className="list-disc list-inside ml-4 space-y-2">
+                <li>Envíos programados los lunes y jueves: tarifa plana de S/ 15.</li>
+                <li>Envíos inmediatos: tarifa según distancia y disponibilidad de InDrive, pagada antes del despacho.</li>
+                <li>Envíos a provincia: costo y plazo coordinados según el courier y destino.</li>
+                <li>Recojo previa coordinación en el Mercado Productores de Santa Anita.</li>
+              </ul>
 
               <h3 className="text-xl font-bold text-black mt-8">4. Cambios y Devoluciones</h3>
               <p>
@@ -87,6 +93,11 @@ export default function TermsAndPrivacyPage() {
               <h3 className="text-xl font-bold text-black mt-8">4. Compartir con Terceros</h3>
               <p>
                 No vendemos, distribuimos ni arrendamos tu información personal a terceros a menos que tengamos tu permiso explícito o la ley así lo requiera. Podemos compartir tus datos de envío únicamente con nuestras empresas de transporte asociadas para cumplir con la entrega de tu pedido.
+              </p>
+
+              <h3 className="text-xl font-bold text-black mt-8">5. Cookies y almacenamiento local</h3>
+              <p>
+                Guardamos el contenido de tu carrito en el almacenamiento local del navegador. El acceso administrativo utiliza una cookie de sesión estrictamente necesaria. Mercado Pago puede utilizar tecnologías técnicas necesarias para procesar pagos de forma segura. Actualmente no utilizamos cookies de publicidad ni analítica personalizada.
               </p>
             </div>
           </section>

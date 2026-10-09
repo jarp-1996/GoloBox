@@ -16,7 +16,18 @@ export async function POST(req: Request) {
     const idempotencyKey = req.headers.get('x-idempotency-key') || crypto.randomUUID();
 
     // Extraer datos del carrito que enviamos desde el frontend
-    const { items, customerEmail, customerName, totalAmount, ...paymentData } = body;
+    const {
+      items,
+      customerEmail,
+      customerName,
+      customerPhone,
+      deliveryMethod,
+      deliveryAddress,
+      deliveryReference,
+      addCard,
+      cardMessage,
+      ...paymentData
+    } = body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: 'El carrito está vacío o es inválido' }, { status: 400 });
@@ -43,6 +54,30 @@ export async function POST(req: Request) {
         price: product.price, // Precio real seguro
         quantity: quantity,
         image: product.image,
+      });
+    }
+
+    if (!customerEmail || !customerName || !customerPhone) {
+      return NextResponse.json({ error: 'Faltan datos del cliente' }, { status: 400 });
+    }
+
+    const allowedDeliveryMethods = ['scheduled', 'immediate', 'province', 'pickup'];
+    if (!allowedDeliveryMethods.includes(deliveryMethod)) {
+      return NextResponse.json({ error: 'Modalidad de entrega inválida' }, { status: 400 });
+    }
+
+    // Los extras se recalculan en el servidor para impedir manipulación.
+    const cardAmount = addCard ? 10 : 0;
+    const deliveryAmount = deliveryMethod === 'scheduled' ? 15 : 0;
+    secureSubtotal += cardAmount + deliveryAmount;
+
+    if (addCard) {
+      secureItems.push({
+        id: 'tarjeta-personalizada',
+        name: 'Tarjeta personalizada',
+        price: cardAmount,
+        quantity: 1,
+        image: '',
       });
     }
 
@@ -95,6 +130,11 @@ export async function POST(req: Request) {
         // Metadata para rastrear el pedido
         metadata: {
           order_id: orderId,
+          customer_phone: customerPhone,
+          delivery_method: deliveryMethod,
+          delivery_address: deliveryAddress,
+          delivery_reference: deliveryReference || '',
+          card_message: addCard ? cardMessage || '' : '',
         },
       },
       requestOptions: {

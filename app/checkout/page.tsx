@@ -5,8 +5,9 @@ import { useCart } from '@/components/CartContext';
 import { useRouter } from 'next/navigation';
 import { initMercadoPago, Payment } from '@mercadopago/sdk-react';
 import Image from 'next/image';
-import { CreditCard, Smartphone, CheckCircle, Copy, AlertTriangle } from 'lucide-react';
+import { CreditCard, CheckCircle, Copy, MapPin, Store, Truck } from 'lucide-react';
 import { useToast } from '@/components/ToastContext';
+import Link from 'next/link';
 
 // Inicializar MP
 if (process.env.NEXT_PUBLIC_MP_PUBLIC_KEY) {
@@ -14,7 +15,7 @@ if (process.env.NEXT_PUBLIC_MP_PUBLIC_KEY) {
 }
 
 export default function CheckoutPage() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearCart, isCartReady } = useCart();
   const router = useRouter();
   const { showToast } = useToast();
   
@@ -23,13 +24,42 @@ export default function CheckoutPage() {
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [addCard, setAddCard] = useState(false);
   const [cardMessage, setCardMessage] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [customer, setCustomer] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    district: '',
+    reference: '',
+  });
+  const [deliveryMethod, setDeliveryMethod] = useState<'scheduled' | 'immediate' | 'province' | 'pickup'>('scheduled');
 
   // Upsell y Recargos
   const upsellAmount = addCard ? 10 : 0;
-  const subtotal = totalPrice + upsellAmount;
+  const deliveryAmount = deliveryMethod === 'scheduled' ? 15 : 0;
+  const subtotal = totalPrice + upsellAmount + deliveryAmount;
   const surcharge = paymentMethod === 'tarjeta' ? subtotal * 0.05 : 0;
   const finalTotal = subtotal + surcharge;
   const waNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '51967171097';
+
+  const deliveryLabels = {
+    scheduled: 'Envío programado (lunes o jueves)',
+    immediate: 'Envío inmediato por InDrive',
+    province: 'Envío a provincia por courier',
+    pickup: 'Recojo en Mercado Productores de Santa Anita',
+  };
+
+  const requiresAddress = deliveryMethod !== 'pickup';
+  const customerDataComplete = Boolean(
+    customer.name.trim() && customer.email.trim() && customer.phone.trim() &&
+    (!requiresAddress || (customer.address.trim() && customer.district.trim()))
+  );
+  const canPay = customerDataComplete && acceptedTerms;
+
+  const updateCustomer = (field: keyof typeof customer, value: string) => {
+    setCustomer(current => ({ ...current, [field]: value }));
+  };
   
   const handleCopyAmount = () => {
     navigator.clipboard.writeText(finalTotal.toFixed(2));
@@ -37,12 +67,12 @@ export default function CheckoutPage() {
   };
 
   useEffect(() => {
-    if (items.length === 0 && !paymentSuccess) {
+    if (isCartReady && items.length === 0 && !paymentSuccess) {
       router.push('/');
     }
-  }, [items, router, paymentSuccess]);
+  }, [items, router, paymentSuccess, isCartReady]);
 
-  if (items.length === 0 && !paymentSuccess) return null;
+  if (!isCartReady || (items.length === 0 && !paymentSuccess)) return null;
 
   if (paymentSuccess) {
     return (
@@ -52,7 +82,7 @@ export default function CheckoutPage() {
             <CheckCircle className="w-10 h-10 text-green-500" />
           </div>
           <h2 className="text-3xl font-black text-gray-900 mb-2">¡Pago Exitoso!</h2>
-          <p className="text-gray-500 mb-8">Tu pedido mayorista ha sido procesado. Nos comunicaremos contigo por WhatsApp para coordinar el envío.</p>
+          <p className="text-gray-500 mb-8">Tu pedido Golo-Box ha sido procesado. Nos comunicaremos contigo para coordinar la entrega.</p>
           <button 
             onClick={() => router.push('/')}
             className="w-full bg-[#991B1B] text-white font-bold py-4 rounded-xl"
@@ -66,7 +96,21 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-32 pb-24">
-      <div className="max-w-[1000px] mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="max-w-[1000px] mx-auto px-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500">
+            <Link href="/" className="hover:text-black transition-colors">Inicio</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/?cart=open" className="hover:text-black transition-colors">Carrito</Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-black" aria-current="page">Checkout</span>
+          </nav>
+          <Link href="/?cart=open" className="w-fit rounded-full border-2 border-black px-5 py-3 text-sm font-black uppercase tracking-wider hover:bg-black hover:text-white transition-colors">
+            ← Modificar pedido
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Lado izquierdo: Resumen del pedido */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 h-fit">
@@ -124,6 +168,10 @@ export default function CheckoutPage() {
               </div>
             )}
             <div className="flex justify-between text-gray-500">
+              <span>{deliveryLabels[deliveryMethod]}</span>
+              <span>{deliveryAmount ? `S/ ${deliveryAmount.toFixed(2)}` : 'Por coordinar'}</span>
+            </div>
+            <div className="flex justify-between text-gray-500">
               <span>Subtotal</span>
               <span>S/ {subtotal.toFixed(2)}</span>
             </div>
@@ -142,6 +190,60 @@ export default function CheckoutPage() {
 
         {/* Lado derecho: Métodos de pago */}
         <div className="flex flex-col gap-6">
+          <section className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 space-y-5">
+            <h2 className="text-2xl font-black text-gray-900">Datos de entrega</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <label className="text-sm font-bold text-gray-700">Nombre completo *
+                <input required value={customer.name} onChange={event => updateCustomer('name', event.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 font-normal outline-none focus:border-black" />
+              </label>
+              <label className="text-sm font-bold text-gray-700">Celular / WhatsApp *
+                <input required type="tel" value={customer.phone} onChange={event => updateCustomer('phone', event.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 font-normal outline-none focus:border-black" />
+              </label>
+              <label className="text-sm font-bold text-gray-700 sm:col-span-2">Correo electrónico *
+                <input required type="email" value={customer.email} onChange={event => updateCustomer('email', event.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 font-normal outline-none focus:border-black" />
+              </label>
+            </div>
+
+            <div>
+              <p className="text-sm font-bold text-gray-700 mb-3">Modalidad de entrega *</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {([
+                  ['scheduled', 'Programado', 'Lunes o jueves · S/ 15', Truck],
+                  ['immediate', 'Inmediato', 'Tarifa según InDrive', Truck],
+                  ['province', 'Provincia', 'Tarifa según courier', MapPin],
+                  ['pickup', 'Recojo', 'Mercado Productores', Store],
+                ] as const).map(([value, title, detail, Icon]) => (
+                  <button key={value} type="button" onClick={() => setDeliveryMethod(value)} className={`text-left rounded-2xl border-2 p-4 transition-colors ${deliveryMethod === value ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                    <Icon className="w-5 h-5 mb-2" />
+                    <span className="block font-black">{title}</span>
+                    <span className="text-xs text-gray-500">{detail}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {requiresAddress && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <label className="text-sm font-bold text-gray-700 sm:col-span-2">Dirección de entrega *
+                  <input required value={customer.address} onChange={event => updateCustomer('address', event.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 font-normal outline-none focus:border-black" />
+                </label>
+                <label className="text-sm font-bold text-gray-700">Distrito / ciudad *
+                  <input required value={customer.district} onChange={event => updateCustomer('district', event.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 font-normal outline-none focus:border-black" />
+                </label>
+                <label className="text-sm font-bold text-gray-700">Referencia
+                  <input value={customer.reference} onChange={event => updateCustomer('reference', event.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 font-normal outline-none focus:border-black" />
+                </label>
+              </div>
+            )}
+
+            <div className="rounded-2xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-950">
+              {deliveryMethod === 'scheduled' && 'La tarifa plana de S/ 15 se incluye en el total. Los despachos programados se realizan los lunes y jueves.'}
+              {deliveryMethod === 'immediate' && 'El costo de InDrive se cotiza según la distancia y debe cancelarse antes de realizar el envío.'}
+              {deliveryMethod === 'province' && 'El costo y plazo del courier se coordinan según el destino antes del despacho.'}
+              {deliveryMethod === 'pickup' && 'El recojo se coordina previamente en el Mercado Productores de Santa Anita.'}
+            </div>
+          </section>
+
           <h2 className="text-2xl font-black text-gray-900">¿Cómo quieres pagar?</h2>
           
           <div className="grid grid-cols-2 gap-4">
@@ -179,6 +281,19 @@ export default function CheckoutPage() {
               </div>
             </button>
           </div>
+
+          <label className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-700 cursor-pointer">
+            <input type="checkbox" checked={acceptedTerms} onChange={event => setAcceptedTerms(event.target.checked)} className="mt-1 w-5 h-5 accent-black" />
+            <span>
+              Acepto los <a href="/terminos-y-privacidad" target="_blank" className="font-bold underline">Términos y la Política de Privacidad</a>, y autorizo el uso de mis datos para gestionar este pedido y su entrega.
+            </span>
+          </label>
+
+          {!canPay && (
+            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+              Completa tus datos y acepta los términos para continuar con el pago.
+            </p>
+          )}
 
           {/* YAPE FLOW */}
           {paymentMethod === 'yape' && (
@@ -224,11 +339,19 @@ export default function CheckoutPage() {
                 </button>
                 
                 <a 
-                  href={`https://wa.me/${waNumber}?text=${encodeURIComponent(`Hola, acabo de yapear S/ ${finalTotal.toFixed(2)} por mi pedido. Adjunto el comprobante.${addCard ? `\n\nTarjeta Personalizada incluida.\nMensaje: "${cardMessage}"` : ''}`)}`}
+                  href={canPay ? `https://wa.me/${waNumber}?text=${encodeURIComponent(`Hola, acabo de yapear S/ ${finalTotal.toFixed(2)} por mi pedido.\n\nCliente: ${customer.name}\nCelular: ${customer.phone}\nCorreo: ${customer.email}\nEntrega: ${deliveryLabels[deliveryMethod]}${requiresAddress ? `\nDirección: ${customer.address}, ${customer.district}\nReferencia: ${customer.reference || 'Sin referencia'}` : ''}.${addCard ? `\n\nTarjeta personalizada incluida.\nMensaje: "${cardMessage}"` : ''}\n\nAdjunto el comprobante.`)}` : '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => clearCart()}
-                  className="block w-full bg-white/10 hover:bg-white/20 text-white font-bold py-4 rounded-2xl transition-all shadow-sm"
+                  onClick={event => {
+                    if (!canPay) {
+                      event.preventDefault();
+                      showToast('Completa tus datos y acepta los términos.');
+                      return;
+                    }
+                    clearCart();
+                  }}
+                  aria-disabled={!canPay}
+                  className={`block w-full font-bold py-4 rounded-2xl transition-all shadow-sm ${canPay ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-white/5 text-white/40 cursor-not-allowed'}`}
                 >
                   2. Enviar comprobante por WhatsApp
                 </a>
@@ -266,6 +389,10 @@ export default function CheckoutPage() {
                   } as any
                 }}
                 onSubmit={async (param: any) => {
+                  if (!canPay) {
+                    showToast('Completa tus datos y acepta los términos.');
+                    return;
+                  }
                   setIsProcessing(true);
                   try {
                     // El Brick de MP envía los datos dentro de formData
@@ -278,7 +405,15 @@ export default function CheckoutPage() {
                       },
                       body: JSON.stringify({
                         ...dataToSend,
-                        description: 'Pedido Mayorista Golozin',
+                        description: 'Pedido Golo-Box',
+                        customerName: customer.name,
+                        customerEmail: customer.email,
+                        customerPhone: customer.phone,
+                        deliveryMethod,
+                        deliveryAddress: requiresAddress ? `${customer.address}, ${customer.district}` : 'Recojo en tienda',
+                        deliveryReference: customer.reference,
+                        addCard,
+                        cardMessage: addCard ? cardMessage : '',
                         items: items.map(item => ({
                           id: item.id,
                           name: item.name,
@@ -307,6 +442,7 @@ export default function CheckoutPage() {
             </div>
           )}
 
+        </div>
         </div>
       </div>
     </div>

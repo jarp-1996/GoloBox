@@ -40,9 +40,7 @@ export function Footer() {
 
           <div className="flex flex-col gap-6">
             <span className="text-gray-600 font-bold uppercase tracking-widest text-micro mb-2">Redes Sociales</span>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">Instagram</a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">TikTok</a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-caption font-medium uppercase hover:text-[#EF4444] hover:translate-x-2 transition-all w-fit">Facebook</a>
+            <span className="text-caption font-medium uppercase text-gray-500">Próximamente</span>
           </div>
 
         </div>
