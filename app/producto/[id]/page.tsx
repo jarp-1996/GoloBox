@@ -1,11 +1,8 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { getProductById, getRelatedProducts, getRecentProducts } from '@/lib/catalog';
+import { getProductById } from '@/lib/catalog';
 import { notFound } from 'next/navigation';
 import { ProductDetail } from './ProductDetail';
-import { ProductCard } from '@/components/ProductCard';
-import Link from 'next/link';
-import Image from 'next/image';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
@@ -59,12 +56,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   if (!product) {
     notFound();
   }
-
-  // Get related products (same category)
-  const relatedProducts = await getRelatedProducts(product.category, product.id, 4);
-
-  // Get recently viewed products (mocked by picking random items)
-  const recentlyViewed = await getRecentProducts(4);
 
   // Mock an original price for demonstration
   const productWithOriginalPrice = {

@@ -217,10 +217,11 @@ export async function searchProducts(query: string, segment?: Segment): Promise<
 }
 
 export async function getProductById(id: string): Promise<Product | undefined> {
-  const { data } = await supabase.from('products').select('*').eq('id', id).single();
-  if (data) {
-    return mapProduct(data);
+  const featuredProduct = FEATURED_BOXES.find(product => product.id === id);
+  if (featuredProduct) {
+    return featuredProduct;
   }
 
-  return FEATURED_BOXES.find(product => product.id === id);
+  const { data } = await supabase.from('products').select('*').eq('id', id).single();
+  return data ? mapProduct(data) : undefined;
 }
